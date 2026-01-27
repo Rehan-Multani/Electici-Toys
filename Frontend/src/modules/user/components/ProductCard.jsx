@@ -67,30 +67,30 @@ export function ProductCard({ product, onQuickView }) {
                 <div className="relative aspect-square bg-secondary/20 overflow-hidden">
                     {/* Discount Badge */}
                     {discountPercentage > 0 && (
-                        <div className="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full z-20 shadow-lg shadow-red-500/20">
+                        <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-red-500 text-white text-[8px] md:text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 md:px-3 md:py-1.5 rounded-full z-20 shadow-lg shadow-red-500/20">
                             {discountPercentage}% OFF
                         </div>
                     )}
 
                     {/* Action Buttons */}
-                    <div className="absolute top-4 right-4 flex flex-col gap-2 z-20 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+                    <div className="absolute top-2 right-2 md:top-4 md:right-4 flex flex-col gap-2 z-20 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out">
                         <button
                             onClick={handleToggleWishlist}
-                            className="bg-background/80 backdrop-blur-md p-2.5 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center text-muted-foreground hover:text-red-500 hover:bg-background"
+                            className="bg-background/80 backdrop-blur-md p-1.5 md:p-2.5 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center text-muted-foreground hover:text-red-500 hover:bg-background"
                         >
-                            <Heart className={`w-4 h-4 ${isInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
+                            <Heart className={`w-3 h-3 md:w-4 md:h-4 ${isInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
                         </button>
                         <button
                             onClick={handleQuickView}
-                            className="bg-background/80 backdrop-blur-md p-2.5 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background"
+                            className="bg-background/80 backdrop-blur-md p-1.5 md:p-2.5 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background"
                         >
-                            <Maximize2 className="w-4 h-4" />
+                            <Maximize2 className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
                         <button
                             onClick={handleAddToCart}
-                            className="bg-background/80 backdrop-blur-md p-2.5 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background"
+                            className="bg-background/80 backdrop-blur-md p-1.5 md:p-2.5 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background"
                         >
-                            <ShoppingBag className="w-4 h-4" />
+                            <ShoppingBag className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
                     </div>
 
@@ -114,32 +114,32 @@ export function ProductCard({ product, onQuickView }) {
                 </div>
 
                 {/* Details Section */}
-                <div className="flex-1 flex flex-col p-5 border-t border-border/50 bg-primary/5">
+                <div className="flex-1 flex flex-col p-2 md:p-5 border-t border-border/50 bg-primary/5">
                     {/* Category & Rating */}
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">
+                    <div className="flex justify-between items-center mb-1 md:mb-2">
+                        <span className="text-[8px] md:text-[10px] text-muted-foreground font-black uppercase tracking-widest line-clamp-1 max-w-[60%]">
                             {product.category}
                         </span>
                         <div className="flex items-center gap-1">
-                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                            <span className="text-xs font-bold text-foreground">
+                            <Star className="w-3 h-3 md:w-3.5 md:h-3.5 fill-amber-400 text-amber-400" />
+                            <span className="text-[10px] md:text-xs font-bold text-foreground">
                                 {product.rating > 0 ? product.rating.toFixed(1) : 'New'}
                             </span>
                         </div>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-lg font-black italic tracking-tight text-foreground mb-3 line-clamp-1 group-hover:text-primary transition-colors uppercase">
+                    <h3 className="text-xs md:text-lg font-black italic tracking-tight text-foreground mb-1.5 md:mb-3 line-clamp-1 group-hover:text-primary transition-colors uppercase">
                         {product.name}
                     </h3>
 
                     {/* Price */}
-                    <div className="mt-auto flex items-baseline gap-2">
-                        <span className="text-lg font-black italic tracking-tighter text-primary">
+                    <div className="mt-auto flex items-baseline gap-1 md:gap-2 flex-wrap">
+                        <span className="text-sm md:text-lg font-black italic tracking-tighter text-primary">
                             ₹{product.price.toLocaleString()}
                         </span>
                         {product.originalPrice && product.originalPrice > product.price && (
-                            <span className="text-sm text-muted-foreground line-through font-bold">
+                            <span className="text-[10px] md:text-sm text-muted-foreground line-through font-bold">
                                 ₹{product.originalPrice.toLocaleString()}
                             </span>
                         )}

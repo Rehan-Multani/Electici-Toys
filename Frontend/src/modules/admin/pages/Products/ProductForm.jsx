@@ -54,7 +54,7 @@ export default function ProductForm() {
                     stock: product.stock?.toString() || product.stockQuantity?.toString() || product.quantity?.toString() || '',
                     status: product.isActive ? 'Active' : (product.status === 'Active' ? 'Active' : 'Draft'),
                     sku: product.sku || '',
-                    sku: product.sku || '',
+
                     specs: (() => {
                         if (!product.specifications || product.specifications.length === 0) return [{ key: '', value: '' }];
                         // Backend (getAllProducts/getProductById) is now returning parsed array in 'specifications'

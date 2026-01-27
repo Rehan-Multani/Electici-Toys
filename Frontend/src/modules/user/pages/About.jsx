@@ -35,18 +35,18 @@ export function About() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="max-w-4xl mx-auto mb-8"
+                        className="max-w-4xl mx-auto mb-6 md:mb-8"
                     >
-                        <h1 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter text-primary-foreground mb-6 drop-shadow-sm font-['Oswald']">
+                        <h1 className="text-3xl md:text-8xl font-black uppercase italic tracking-tighter text-primary-foreground mb-4 md:mb-6 drop-shadow-sm font-['Oswald']">
                             About Us
                         </h1>
-                        <p className="text-lg md:text-xl font-bold italic text-primary-foreground/80 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-sm md:text-xl font-bold italic text-primary-foreground/80 max-w-2xl mx-auto leading-relaxed px-4">
                             {aboutPage.hero.mission || "We are driven by a passion for electric innovation and the joy of movement."}
                         </p>
                     </motion.div>
 
                     {/* Image Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 translate-y-10 md:translate-y-20 max-w-5xl mx-auto">
+                    <div className="grid grid-cols-4 gap-1.5 md:gap-6 translate-y-4 md:translate-y-20 max-w-5xl mx-auto px-1 md:px-0">
                         {(aboutPage.images || [
                             "/assets/products/WhatsApp Image 2026-01-10 at 16.11.39.jpeg",
                             "/assets/products/WhatsApp Image 2026-01-10 at 16.11.33.jpeg",
@@ -59,7 +59,7 @@ export function About() {
                                 animate={{ opacity: 1, y: 0, rotate: idx % 2 === 0 ? -3 : 3 }}
                                 whileHover={{ y: -15, rotate: 0, scale: 1.05 }}
                                 transition={{ duration: 0.5, type: "spring" }}
-                                className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-white/10 bg-white dark:bg-zinc-800"
+                                className="aspect-[3/4] rounded-xl md:rounded-[2rem] overflow-hidden shadow-lg md:shadow-2xl border-2 md:border-4 border-white dark:border-white/10 bg-white dark:bg-zinc-800"
                             >
                                 <img
                                     src={src}
@@ -74,13 +74,13 @@ export function About() {
             <div className="h-16 md:h-32" /> {/* Spacer for overlap content */}
 
             {/* Values Grid */}
-            <section className="container mx-auto px-4 pt-12 pb-32">
+            <section className="container mx-auto px-4 pt-8 pb-16 md:pt-12 md:pb-32">
                 <motion.div
                     variants={staggerContainer(0.1)}
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, amount: 0.2 }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+                    className="grid grid-cols-4 gap-1.5 md:gap-8"
                 >
                     {aboutPage.values.map((v, index) => {
                         const colorPalettes = [
@@ -96,35 +96,36 @@ export function About() {
                                 key={v.id}
                                 variants={fadeIn('up')}
                                 whileHover={{ y: -5 }}
-                                className="relative bg-card rounded-xl shadow-xl overflow-visible mt-4 pb-8 transition-all duration-300 border border-border/10"
+                                className="relative bg-card rounded-lg md:rounded-xl shadow-xl overflow-visible mt-2 md:mt-4 pb-2 md:pb-8 transition-all duration-300 border border-border/10"
                             >
                                 {/* Ribbon */}
                                 <div
-                                    className={`absolute top-6 -left-0 w-[calc(100%+1.5rem)] h-14 ${theme.bg} flex items-center justify-between px-6 shadow-sm z-20`}
+                                    className={`absolute top-2 md:top-6 -left-0 w-[calc(100%+1rem)] md:w-[calc(100%+1.5rem)] h-8 md:h-14 ${theme.bg} flex items-center justify-between px-2 md:px-6 shadow-sm z-20`}
                                     style={{ clipPath: 'polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%)' }}
                                 >
-                                    <span className={`text-sm font-black tracking-[0.1em] uppercase ${theme.text} drop-shadow-md`}>
-                                        VALUE 0{index + 1}
+                                    <span className={`text-[8px] md:text-sm font-black tracking-[0.1em] uppercase ${theme.text} drop-shadow-md`}>
+                                        <span className="md:hidden">0{index + 1}</span>
+                                        <span className="hidden md:inline">VALUE 0{index + 1}</span>
                                     </span>
-                                    <div className="bg-white/20 backdrop-blur-sm p-1.5 rounded-lg">
-                                        <IconRenderer name={v.icon} className={`h-5 w-5 ${theme.text}`} />
+                                    <div className="bg-white/20 backdrop-blur-sm p-0.5 md:p-1.5 rounded-lg">
+                                        <IconRenderer name={v.icon} className={`h-3 w-3 md:h-5 md:w-5 ${theme.text}`} />
                                     </div>
                                 </div>
 
                                 {/* Fold Effect (The dark triangle that creates depth) */}
                                 <div
-                                    className={`absolute top-[5rem] -right-6 w-6 h-6 ${theme.fold} z-10`}
+                                    className={`absolute top-[2.5rem] md:top-[5rem] -right-4 md:-right-6 w-4 h-4 md:w-6 md:h-6 ${theme.fold} z-10`}
                                     style={{
                                         clipPath: 'polygon(0 0, 100% 0, 0 100%)',
                                         backgroundColor: 'currentColor'
                                     }}
                                 />
 
-                                <div className="pt-28 px-8 pb-4 space-y-4">
-                                    <h3 className="text-xl font-bold uppercase text-foreground tracking-tight font-['Oswald']">
+                                <div className="pt-12 px-1 pb-2 md:pt-28 md:px-8 md:pb-4 space-y-0.5 md:space-y-4 text-center md:text-left">
+                                    <h3 className="text-[7px] md:text-xl font-bold uppercase text-foreground tracking-tight font-['Oswald'] leading-tight md:whitespace-normal truncate">
                                         {v.title}
                                     </h3>
-                                    <p className="text-sm font-medium text-muted-foreground leading-relaxed italic">
+                                    <p className="hidden md:block text-sm font-medium text-muted-foreground leading-relaxed italic">
                                         {v.description}
                                     </p>
                                 </div>
@@ -135,15 +136,15 @@ export function About() {
             </section>
 
             {/* Content Section */}
-            <section className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <section className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center mb-12">
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, type: "spring" }}
-                    className="space-y-6"
+                    className="space-y-4 md:space-y-6"
                 >
-                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.9] text-primary">
+                    <h2 className="text-3xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.9] text-primary">
                         {aboutPage.content.heading}
                     </h2>
                     <div className="space-y-4 text-base md:text-lg text-muted-foreground font-bold italic leading-relaxed opacity-80">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { ShoppingCart, Heart, Search, ShoppingBag } from 'lucide-react';
+import { ShoppingCart, Heart, Search, ShoppingBag, X } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { CartDrawer } from '../components/CartDrawer';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,7 @@ export function Header() {
     const navigate = useNavigate();
     const [scrolled, setScrolled] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState("");
+    const [mobileSearchExpanded, setMobileSearchExpanded] = React.useState(false);
 
     React.useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -64,7 +65,7 @@ export function Header() {
                     className={cn(
                         "relative group transition-colors duration-300",
                         mobile
-                            ? "text-3xl font-black italic uppercase tracking-tighter py-6 flex justify-center w-full border-b border-border/10 hover:text-primary hover:bg-white/5"
+                            ? "text-xl font-black italic uppercase tracking-tighter py-3 flex justify-center w-full border-b border-white/5 hover:text-primary hover:bg-white/5"
                             : "text-[11px] font-black uppercase tracking-[0.2em] text-foreground hover:text-primary"
                     )}
                 >
@@ -85,38 +86,80 @@ export function Header() {
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-black/5",
                 scrolled
                     ? "bg-background/95 backdrop-blur-xl shadow-md py-2"
-                    : "bg-background/80 backdrop-blur-md shadow-none py-4"
+                    : "bg-background/80 backdrop-blur-md shadow-none py-3 md:py-4"
             )}
         >
-            <div className="container mx-auto px-6 h-full">
-                <div className="flex items-center justify-between h-full">
-                    <div className="flex items-center gap-4 lg:gap-12">
+            <div className="container mx-auto px-4 md:px-6 h-full">
+                <div className="flex items-center justify-between h-full gap-2">
+                    <div className="flex items-center gap-2 lg:gap-12 shrink-0">
                         {/* Mobile Menu Trigger */}
                         <div className="lg:hidden">
                             <Sheet>
                                 <SheetTrigger asChild>
                                     <Button variant="ghost" size="icon" className="-ml-2 hover:bg-primary/10">
-                                        <Menu className="h-7 w-7" />
+                                        <Menu className="h-6 w-6 md:h-7 md:w-7" />
                                     </Button>
                                 </SheetTrigger>
-                                <SheetContent side="left" className="w-full flex flex-col pt-12 glass border-r border-border/10">
-                                    <SheetHeader className="mb-8">
-                                        <SheetTitle className="text-center font-black italic tracking-tighter text-4xl text-primary">ELECTRICI TOYS-HUB</SheetTitle>
+                                <SheetContent side="left" className="w-[280px] flex flex-col pt-10 glass border-r border-border/10 overflow-y-auto">
+                                    <SheetHeader className="mb-4 space-y-4">
+                                        <SheetTitle className="text-center font-black italic tracking-tighter text-2xl text-primary leading-tight whitespace-nowrap">
+                                            ELECTRICI TOYS-HUB
+                                        </SheetTitle>
+                                        <div className="w-full h-px bg-white/10" />
                                     </SheetHeader>
-                                    <nav className="flex flex-col gap-2 mt-4 items-center w-full">
+
+                                    <nav className="flex flex-col gap-1 mt-2 items-center w-full">
                                         <NavLinks mobile onClick={() => { }} />
+
+                                        <div className="w-full h-px bg-white/5 my-4" />
+
+                                        {/* Mobile Utility Bar - Horizontal Line */}
+                                        <div className="w-full flex items-center justify-evenly pb-4">
+                                            {/* Wishlist */}
+                                            <Link
+                                                to="/wishlist"
+                                                className="flex flex-col items-center gap-2 group"
+                                            >
+                                                <div className="h-10 w-10 rounded-full glass flex items-center justify-center group-hover:text-primary transition-colors">
+                                                    <Heart className="w-5 h-5" />
+                                                </div>
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-primary">Wishlist</span>
+                                            </Link>
+
+                                            {/* Notifications */}
+                                            <Link
+                                                to="/notifications"
+                                                className="flex flex-col items-center gap-2 group relative"
+                                            >
+                                                <div className="h-10 w-10 rounded-full glass flex items-center justify-center group-hover:text-primary transition-colors relative">
+                                                    <Bell className="w-5 h-5" />
+                                                    {unreadCount > 0 && (
+                                                        <span className="absolute -top-1 -right-1 bg-primary text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-glow animate-pulse">
+                                                            {unreadCount}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-primary">Notifs</span>
+                                            </Link>
+
+                                            {/* Theme */}
+                                            <div className="flex flex-col items-center gap-2">
+                                                <ThemeToggle />
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Theme</span>
+                                            </div>
+                                        </div>
                                     </nav>
                                 </SheetContent>
                             </Sheet>
                         </div>
 
-                        <Link to="/" className="flex items-center gap-2 group">
+                        <Link to="/" className="flex items-center gap-1 sm:gap-2 group">
                             <motion.div
                                 whileHover={{ scale: 1.05, rotate: -2 }}
-                                className="flex items-center"
+                                className="flex items-center whitespace-nowrap"
                             >
-                                <span className="text-xl md:text-2xl font-black italic tracking-tighter text-foreground/60 group-hover:text-primary transition-colors">ELECTRICI </span>
-                                <span className="text-xl md:text-2xl font-black italic tracking-tighter text-primary drop-shadow-glow">TOYS-HUB</span>
+                                <span className="text-base sm:text-lg md:text-2xl font-black italic tracking-tighter text-foreground/60 group-hover:text-primary transition-colors">ELECTRICI </span>
+                                <span className="text-base sm:text-lg md:text-2xl font-black italic tracking-tighter text-primary drop-shadow-glow ml-1">TOYS-HUB</span>
                             </motion.div>
                         </Link>
 
@@ -125,7 +168,8 @@ export function Header() {
                         </nav>
                     </div>
 
-                    <div className="flex items-center gap-4 md:gap-8">
+                    <div className="flex items-center gap-2 md:gap-8 justify-end flex-1 min-w-0">
+                        {/* Desktop Search */}
                         <div className="hidden md:flex items-center glass rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-primary/20 transition-all w-48 lg:w-64">
                             <Search className="h-4 w-4 text-muted-foreground" />
                             <input
@@ -138,7 +182,43 @@ export function Header() {
                             />
                         </div>
 
-                        <div className="flex items-center gap-2 md:gap-4">
+                        {/* Mobile Expanded Search */}
+                        <AnimatePresence>
+                            {mobileSearchExpanded && (
+                                <motion.div
+                                    initial={{ opacity: 0, width: 0 }}
+                                    animate={{ opacity: 1, width: "100%" }}
+                                    exit={{ opacity: 0, width: 0 }}
+                                    className="flex md:hidden items-center glass rounded-full px-3 py-1.5 flex-1 mx-2 overflow-hidden border border-primary/20"
+                                >
+                                    <Search className="h-4 w-4 text-muted-foreground shrink-0 mr-2" />
+                                    <input
+                                        autoFocus
+                                        type="text"
+                                        placeholder="Search..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                handleSearch(e);
+                                                setMobileSearchExpanded(false);
+                                            }
+                                        }}
+                                        className="bg-transparent border-none outline-none text-sm w-full min-w-0 placeholder:text-muted-foreground/50 text-foreground font-medium"
+                                    />
+                                    <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0 ml-1 hover:text-red-500" onClick={() => setMobileSearchExpanded(false)}>
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Icons Container - Hidden when mobile search expanded */}
+                        <div className={cn("flex items-center gap-1 sm:gap-2 md:gap-4", mobileSearchExpanded ? "hidden md:flex" : "flex")}>
+                            {/* Mobile Search Trigger */}
+                            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileSearchExpanded(true)}>
+                                <Search className="h-5 w-5" />
+                            </Button>
                             <motion.button
                                 whileHover={{ scale: 1.2, rotate: 10 }}
                                 className="text-foreground/70 hover:text-primary transition-colors hidden sm:block"
@@ -149,11 +229,15 @@ export function Header() {
 
                             <CartDrawer />
 
-                            <ThemeToggle />
+                            {/* Theme Toggle - Hidden on Mobile */}
+                            <div className="hidden md:block">
+                                <ThemeToggle />
+                            </div>
 
+                            {/* Notifications - Hidden on Mobile */}
                             <motion.button
                                 whileHover={{ scale: 1.2, rotate: 10 }}
-                                className="text-foreground/70 hover:text-primary transition-colors relative"
+                                className="text-foreground/70 hover:text-primary transition-colors relative hidden md:block" // Hidden on mobile
                                 onClick={() => navigate('/notifications')}
                             >
                                 <Bell className="h-6 w-6" />
@@ -167,7 +251,7 @@ export function Header() {
                             {isAuthenticated ? (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-primary/20 hover:border-primary transition-colors">
+                                        <Button variant="ghost" className="relative h-8 w-8 md:h-10 md:w-10 rounded-full p-0 overflow-hidden border-2 border-primary/20 hover:border-primary transition-colors">
                                             <img
                                                 src={user?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"}
                                                 alt={user?.name}
@@ -212,13 +296,25 @@ export function Header() {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             ) : (
-                                <Button
-                                    onClick={() => navigate('/login')}
-                                    premium
-                                    className="rounded-full font-black italic uppercase tracking-tighter px-6 h-10 text-xs shadow-glow"
-                                >
-                                    LOGIN
-                                </Button>
+                                <>
+                                    {/* Desktop Login Button */}
+                                    <Button
+                                        onClick={() => navigate('/login')}
+                                        premium
+                                        className="hidden md:flex rounded-full font-black italic uppercase tracking-tighter px-6 h-10 text-xs shadow-glow"
+                                    >
+                                        LOGIN
+                                    </Button>
+                                    {/* Mobile Login Icon */}
+                                    <Button
+                                        onClick={() => navigate('/login')}
+                                        variant="ghost"
+                                        size="icon"
+                                        className="md:hidden text-foreground hover:text-primary"
+                                    >
+                                        <User className="h-6 w-6" />
+                                    </Button>
+                                </>
                             )}
                         </div>
                     </div>
@@ -275,8 +371,8 @@ export function Footer() {
                         {categories.length > 0 ? (
                             categories.map((cat) => (
                                 <li key={cat._id}>
-                                    <Link 
-                                        to={`/products?category=${encodeURIComponent(cat.categoryName)}`} 
+                                    <Link
+                                        to={`/products?category=${encodeURIComponent(cat.categoryName)}`}
                                         className="hover:text-primary transition-all"
                                     >
                                         {cat.categoryName}

@@ -32,7 +32,7 @@ export function Contact() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!formData.name || !formData.email || !formData.message) {
             toast({
                 title: "Incomplete Form",
@@ -72,10 +72,10 @@ export function Contact() {
         <motion.div
             initial="hidden"
             animate="show"
-            className="container mx-auto px-4 pt-20 pb-0"
+            className="container mx-auto px-4 pt-16 md:pt-20 pb-0"
         >
             <div className="max-w-6xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20">
                     {/* Left Column: Header + Contact Info */}
                     <motion.div
                         variants={staggerContainer(0.1, 0.3)}
@@ -92,7 +92,7 @@ export function Contact() {
                                         transition: { type: "spring", stiffness: 120, damping: 20, mass: 1 }
                                     }
                                 }}
-                                className="text-4xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.9] mb-4 drop-shadow-xl"
+                                className="text-3xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.9] mb-4 drop-shadow-xl"
                                 style={{ color: THEME_COLOR }}
                             >
                                 {contactPage.header.title}
@@ -153,7 +153,7 @@ export function Contact() {
                         <motion.div
                             variants={fadeIn('up')}
                             whileHover={{ y: -5 }}
-                            className="p-8 rounded-[2.5rem] text-white space-y-4 shadow-xl relative overflow-hidden group"
+                            className="p-6 md:p-8 rounded-[2.5rem] text-white space-y-4 shadow-xl relative overflow-hidden group"
                             style={{ backgroundColor: THEME_COLOR, boxShadow: `0 20px 40px -10px ${THEME_COLOR}50` }} // Adding hex alpha for shadow
                         >
                             <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-8 -mt-8 blur-2xl group-hover:bg-white/20 transition-all" />
@@ -170,7 +170,7 @@ export function Contact() {
 
                     {/* Form Section - Right Column */}
                     <motion.div variants={fadeIn('left')} className="lg:col-span-1">
-                        <div className="bg-card/50 backdrop-blur-sm border border-border/50 shadow-xl rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden transition-colors duration-300 h-full">
+                        <div className="bg-card/50 backdrop-blur-sm border border-border/50 shadow-xl rounded-[2.5rem] p-5 md:p-10 relative overflow-hidden transition-colors duration-300 h-full">
                             <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none opacity-20" style={{ backgroundColor: THEME_COLOR }} />
 
                             <div className="mb-8 text-center md:text-left relative z-10">
@@ -250,7 +250,7 @@ export function Contact() {
                 </div>
 
                 {/* Footer Video Section */}
-                <div className="mt-20 w-full flex justify-center mb-0">
+                <div className="mt-12 md:mt-20 w-full flex justify-center mb-0">
                     <div className="w-full max-w-[150px] relative">
                         <video
                             src="/assets/footer video/video4.mp4"
@@ -263,6 +263,6 @@ export function Contact() {
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </motion.div >
     );
 }

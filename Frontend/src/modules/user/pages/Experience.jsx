@@ -46,17 +46,17 @@ export function Experience() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="relative z-10 text-center space-y-12 max-w-5xl px-4"
+                    className="relative z-10 text-center space-y-6 md:space-y-12 max-w-5xl px-4"
                 >
                     <motion.p
                         variants={fadeIn('up')}
-                        className="text-primary text-sm font-black uppercase tracking-[0.4em] drop-shadow-glow"
+                        className="text-primary text-[10px] md:text-sm font-black uppercase tracking-[0.4em] drop-shadow-glow"
                     >
                         {experiencePage.footer.tagline}
                     </motion.p>
                     <motion.h2
                         variants={fadeIn('up')}
-                        className="text-6xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.8] bg-gradient-to-b from-white via-white to-white/20 bg-clip-text text-transparent italic"
+                        className="text-5xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.8] bg-gradient-to-b from-white via-white to-white/20 bg-clip-text text-transparent italic"
                     >
                         {experiencePage.footer.heading.split('\\n').map((line, i) => (
                             <React.Fragment key={i}>
@@ -67,16 +67,16 @@ export function Experience() {
 
                     <motion.div
                         variants={fadeIn('up')}
-                        className="flex flex-col md:flex-row items-center gap-8 justify-center pt-12"
+                        className="flex flex-row items-center gap-4 justify-center pt-8 md:pt-12"
                     >
                         {experiencePage.footer.buttons.map((btn, i) => (
-                            <a key={i} href={btn.link} className="w-full md:w-auto">
+                            <a key={i} href={btn.link} className="w-auto">
                                 <Button
                                     variant={btn.variant === 'outline' ? 'ghost' : 'default'}
                                     premium={btn.variant !== 'outline'}
-                                    className={`w-full md:w-64 h-20 rounded-full text-xl font-black italic tracking-tighter shadow-2xl ${btn.variant === 'outline'
-                                            ? '!bg-white !text-black hover:!bg-white/90'
-                                            : ''
+                                    className={`w-auto px-4 md:w-64 h-12 md:h-20 rounded-full text-xs md:text-xl font-black italic tracking-tighter shadow-xl ${btn.variant === 'outline'
+                                        ? '!bg-white !text-black hover:!bg-white/90'
+                                        : ''
                                         }`}
                                 >
                                     {btn.text}

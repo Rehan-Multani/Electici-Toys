@@ -40,15 +40,15 @@ export function Testimonials() {
     ].filter(Boolean);
 
     return (
-        <section className="w-full py-16 relative overflow-hidden bg-secondary/30 dark:bg-card/20">
+        <section className="w-full py-8 md:py-16 relative overflow-hidden bg-secondary/30 dark:bg-card/20">
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center mb-10 space-y-4"
+                    className="text-center mb-6 md:mb-10 space-y-2 md:space-y-4"
                 >
-                    <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-foreground drop-shadow-sm font-['Oswald']">
+                    <h2 className="text-2xl md:text-5xl font-black uppercase italic tracking-tighter text-foreground drop-shadow-sm font-['Oswald']">
                         Trusted by Thousands of Customers Like You
                     </h2>
                     <div className="h-1.5 w-24 bg-primary mx-auto rounded-full shadow-glow" />
@@ -64,25 +64,25 @@ export function Testimonials() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: direction > 0 ? -50 : 50 }}
                                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                                className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16"
+                                className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-16"
                             >
                                 {visibleReviews.map((review) => (
-                                    <div key={review.id} className="flex flex-col items-center text-center space-y-5 group">
+                                    <div key={review.id} className="flex flex-col items-center text-center space-y-3 md:space-y-5 group">
                                         <div className="relative">
-                                            <div className="w-24 h-24 rounded-full p-1.5 bg-card border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-500">
+                                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-full p-1 md:p-1.5 bg-card border-2 border-primary/20 shadow-xl group-hover:border-primary transition-all duration-500">
                                                 <img
                                                     src={review.image}
                                                     alt={review.name}
                                                     className="w-full h-full rounded-full object-cover"
                                                 />
                                             </div>
-                                            <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground p-2 rounded-full shadow-lg">
-                                                <Quote size={12} fill="currentColor" />
+                                            <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground p-1.5 md:p-2 rounded-full shadow-lg">
+                                                <Quote size={10} className="md:w-3 md:h-3" fill="currentColor" />
                                             </div>
                                         </div>
 
-                                        <div className="space-y-1">
-                                            <h3 className="text-xl font-black uppercase italic tracking-tight text-foreground font-['Oswald']">{review.name}</h3>
+                                        <div className="space-y-0.5 md:space-y-1">
+                                            <h3 className="text-base md:text-xl font-black uppercase italic tracking-tight text-foreground font-['Oswald']">{review.name}</h3>
                                             <div className="flex gap-0.5 justify-center text-amber-400">
                                                 {[...Array(5)].map((_, i) => (
                                                     <Star
@@ -95,7 +95,7 @@ export function Testimonials() {
                                             </div>
                                         </div>
 
-                                        <p className="text-muted-foreground font-bold text-sm md:text-base leading-relaxed italic max-w-sm">
+                                        <p className="text-muted-foreground font-bold text-xs md:text-base leading-relaxed italic max-w-sm px-4 md:px-0">
                                             "{review.text}"
                                         </p>
 

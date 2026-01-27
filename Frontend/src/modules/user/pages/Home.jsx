@@ -174,7 +174,7 @@ export function Home() {
                         >
                             <motion.h1
                                 variants={fadeIn('up')}
-                                className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter mb-10 leading-[0.85] uppercase italic text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                                className="text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter mb-4 md:mb-10 leading-[0.85] uppercase italic text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                             >
                                 {homePage.hero.heading.split(' ').map((word, i) =>
                                     word === 'POWER' ? <span key={i} className="text-primary not-italic text-glow">POWER </span> : word + ' '
@@ -186,7 +186,7 @@ export function Home() {
                                     <Button
                                         premium
                                         size="lg"
-                                        className="rounded-full w-full sm:w-auto px-10 h-16 sm:px-16 sm:h-20 text-lg sm:text-2xl font-black italic tracking-tighter shadow-glow"
+                                        className="rounded-full w-auto px-6 h-10 md:px-16 md:h-20 text-xs md:text-2xl font-black italic tracking-tighter shadow-glow"
                                     >
                                         {homePage.hero.ctaText}
                                     </Button>
@@ -207,25 +207,25 @@ export function Home() {
                 </div>
                 <div className="flex gap-6 md:gap-12 overflow-x-auto py-8 px-8 snap-x hide-scrollbar justify-start w-full border-b border-border/5 bg-transparent backdrop-blur-sm">
                     {/* Always show "All" */}
-                    <a href="/products" className="flex flex-col items-center gap-2 min-w-[80px] group cursor-pointer snap-start px-2">
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 bg-white/20 dark:bg-white/5 group-hover:bg-white/40 transition-all duration-300 transform group-hover:-translate-y-3 shadow-md group-hover:shadow-xl">
+                    <a href="/products" className="flex flex-col items-center gap-2 min-w-[64px] md:min-w-[80px] group cursor-pointer snap-start px-2">
+                        <div className="w-16 h-16 md:w-24 md:h-24 rounded-full p-1 bg-white/20 dark:bg-white/5 group-hover:bg-white/40 transition-all duration-300 transform group-hover:-translate-y-3 shadow-md group-hover:shadow-xl">
                             <div className="w-full h-full rounded-full overflow-hidden border-2 border-white/80 dark:border-white/20 shadow-sm group-hover:scale-105 transition-transform duration-300 relative">
                                 <img src="/assets/products/WhatsApp Image 2026-01-10 at 16.10.54.jpeg" alt="All Products" className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
                             </div>
                         </div>
-                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-primary-foreground/90 group-hover:text-white transition-colors text-center mt-1">All</span>
+                        <span className="text-[8px] md:text-xs font-bold uppercase tracking-wider text-primary-foreground/90 group-hover:text-white transition-colors text-center mt-1">All</span>
                     </a>
 
                     {backendCategories.map((cat, i) => (
-                        <a key={cat._id || i} href={`/products?category=${cat.categoryName.toLowerCase()}`} className="flex flex-col items-center gap-2 min-w-[80px] group cursor-pointer snap-start px-2">
-                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 bg-white/20 dark:bg-white/5 group-hover:bg-white/40 transition-all duration-300 transform group-hover:-translate-y-3 shadow-md group-hover:shadow-xl">
+                        <a key={cat._id || i} href={`/products?category=${cat.categoryName.toLowerCase()}`} className="flex flex-col items-center gap-2 min-w-[64px] md:min-w-[80px] group cursor-pointer snap-start px-2">
+                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-full p-1 bg-white/20 dark:bg-white/5 group-hover:bg-white/40 transition-all duration-300 transform group-hover:-translate-y-3 shadow-md group-hover:shadow-xl">
                                 <div className="w-full h-full rounded-full overflow-hidden border-2 border-white/80 dark:border-white/20 shadow-sm group-hover:scale-105 transition-transform duration-300 relative">
                                     <img src={cat.image || '/assets/products/WhatsApp Image 2026-01-10 at 16.10.55.jpeg'} alt={cat.categoryName} className="w-full h-full object-cover" />
                                     <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
                                 </div>
                             </div>
-                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-primary-foreground/90 group-hover:text-white transition-colors text-center mt-1">{cat.categoryName}</span>
+                            <span className="text-[8px] md:text-xs font-bold uppercase tracking-wider text-primary-foreground/90 group-hover:text-white transition-colors text-center mt-1">{cat.categoryName}</span>
                         </a>
                     ))}
                 </div>
@@ -234,24 +234,25 @@ export function Home() {
 
 
             {/* Featured Products */}
-            <section className="container mx-auto px-4 py-24">
+            <section className="container mx-auto px-4 py-12 md:py-24">
                 <motion.div
                     variants={fadeIn('up')}
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6"
+                    className="flex flex-row items-center justify-between mb-8 md:mb-16 gap-2 md:gap-6"
                 >
-                    <div className="space-y-4">
-                        <h2 className="text-5xl md:text-8xl font-['Oswald'] font-black tracking-tighter uppercase italic text-primary leading-[0.8] drop-shadow-md">
+                    <div className="space-y-1 md:space-y-4 flex-1">
+                        <h2 className="text-2xl md:text-8xl font-['Oswald'] font-black tracking-tighter uppercase italic text-primary leading-none drop-shadow-md text-left">
                             {homePage.featuredSection.title}
                         </h2>
-                        <p className="text-lg md:text-xl text-muted-foreground font-bold italic opacity-70">
+                        <p className="text-[10px] md:text-xl text-muted-foreground font-bold italic opacity-70 text-left line-clamp-1">
                             {homePage.featuredSection.subtitle}
                         </p>
                     </div>
-                    <div className="flex flex-col items-end">
-                        <div className="w-[220px] md:w-[280px] -mb-8 mr-8 relative z-10 pointer-events-none">
+
+                    <div className="flex items-center gap-2 md:gap-8 shrink-0">
+                        <div className="w-[60px] md:w-[280px] relative z-10 pointer-events-none shrink-0">
                             <video
                                 src="/assets/footer video/free-male-investor-riding-scooter-animation-gif-download-5446246 (1).mp4"
                                 autoPlay
@@ -262,9 +263,10 @@ export function Home() {
                             />
                         </div>
                         <CTALink to={homePage.featuredSection.ctaLink}>
-                            <Button variant="link" className="font-black text-xl tracking-tighter uppercase italic group p-0 h-auto gap-3">
-                                {homePage.featuredSection.ctaText}
-                                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                            <Button variant="link" className="font-black text-xs md:text-xl tracking-tighter uppercase italic group p-0 h-auto gap-1 md:gap-3 shrink-0">
+                                <span className="hidden md:inline">{homePage.featuredSection.ctaText}</span>
+                                <span className="md:hidden">ALL</span>
+                                <span className="inline-flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full border border-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 text-[10px] md:text-base">
                                     →
                                 </span>
                             </Button>
@@ -272,7 +274,7 @@ export function Home() {
                     </div>
                 </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-12">
                     {featuredProducts.map((product) => (
                         <ProductCard
                             key={product.id}
@@ -289,11 +291,11 @@ export function Home() {
                     {homePage.categories.slice(0, 1).map((cat) => (
                         <motion.div
                             key={cat.id}
-                            initial={{ opacity: 0, x: -50 }}
+                            initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, type: "spring" }}
-                            className={`h-[380px] md:h-[600px] rounded-[2rem] md:rounded-[3rem] bg-${cat.bgColor} relative overflow-hidden group p-8 md:p-16 flex flex-col justify-end border-2 border-transparent hover:border-${cat.borderColor} transition-all duration-700 shadow-2xl hover:shadow-glow`}
+                            className={`h-[220px] md:h-[600px] rounded-[1.5rem] md:rounded-[3rem] bg-${cat.bgColor} relative overflow-hidden group p-4 md:p-16 flex flex-col justify-end border-2 border-transparent hover:border-${cat.borderColor} transition-all duration-700 shadow-xl hover:shadow-glow`}
                         >
                             <motion.img
                                 initial={{ scale: 1.2, rotate: -5 }}
@@ -301,10 +303,10 @@ export function Home() {
                                 transition={{ duration: 1.2 }}
                                 src={cat.image}
                                 alt={cat.name}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] object-contain opacity-20 group-hover:opacity-40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-1000 pointer-events-none filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] object-contain opacity-20 group-hover:opacity-40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-1000 pointer-events-none filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
                             />
                             <div className="relative z-10">
-                                <h3 className="text-4xl sm:text-6xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.85] mb-4 md:mb-6 drop-shadow-lg">
+                                <h3 className="text-3xl sm:text-6xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.85] mb-2 md:mb-6 drop-shadow-lg">
                                     {cat.title.split('\\n').map((line, i) => (
                                         <React.Fragment key={i}>
                                             {line}
@@ -312,9 +314,9 @@ export function Home() {
                                         </React.Fragment>
                                     ))}
                                 </h3>
-                                <p className="max-w-xs text-muted-foreground font-black mb-6 md:mb-10 uppercase tracking-[0.2em] text-[10px] md:text-xs opacity-80">{cat.description}</p>
+                                <p className="max-w-xs text-muted-foreground font-black mb-3 md:mb-10 uppercase tracking-[0.2em] text-[8px] md:text-xs opacity-80">{cat.description}</p>
                                 <CTALink to={cat.ctaLink} className="w-fit">
-                                    <Button premium size="lg" className="rounded-full px-8 md:px-12 h-12 md:h-14 font-black italic shadow-2xl text-sm md:text-base">{cat.ctaText}</Button>
+                                    <Button premium size="sm" className="rounded-full px-6 md:px-12 h-8 md:h-14 font-black italic shadow-xl text-xs md:text-base">{cat.ctaText}</Button>
                                 </CTALink>
                             </div>
                         </motion.div>
@@ -349,8 +351,8 @@ export function Home() {
             </section>
 
             {/* Trust Markers - Colorful Circles */}
-            <section className="container mx-auto px-4 py-24">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+            <section className="container mx-auto px-2 md:px-4 py-6 md:py-24">
+                <div className="grid grid-cols-4 gap-2 md:gap-8 justify-items-center">
                     {homePage.trustMarkers.map((item, i) => {
                         const colors = [
                             'bg-[#D12F53]', // Red/Pink
@@ -366,92 +368,61 @@ export function Home() {
                                 variants={fadeIn('up')}
                                 initial="hidden"
                                 whileInView="show"
-                                viewport={{ once: true }}
                                 transition={{ delay: i * 0.2 }}
-                                className="group relative"
+                                className="group relative w-full flex justify-center"
                             >
-                                <div className={`w-[280px] h-[280px] ${bgColor} rounded-full flex flex-col items-center justify-center text-center px-8 py-6 text-white transition-transform duration-300 hover:scale-105 z-10 relative`}>
-                                    <div className="mb-2 p-2 bg-white/20 rounded-full backdrop-blur-sm">
-                                        <IconRenderer name={item.icon} className="w-6 h-6 text-white" />
+                                <div className={`w-[80px] h-[80px] md:w-[280px] md:h-[280px] ${bgColor} rounded-full flex flex-col items-center justify-center text-center p-1 md:px-8 md:py-6 text-white transition-transform duration-300 hover:scale-105 z-10 relative shadow-md`}>
+                                    <div className="mb-1 md:mb-2 p-1 md:p-2 bg-white/20 rounded-full backdrop-blur-sm">
+                                        <IconRenderer name={item.icon} className="w-3.5 h-3.5 md:w-6 md:h-6 text-white" />
                                     </div>
-                                    <h3 className="text-lg font-bold uppercase tracking-wider mb-1 font-['Oswald'] leading-tight">{item.title}</h3>
-                                    <div className="w-12 h-0.5 bg-white/50 mb-2" />
+                                    <h3 className="text-[8px] md:text-lg font-bold uppercase tracking-wider mb-0 md:mb-1 font-['Oswald'] leading-tight max-w-[90%] truncate md:overflow-visible md:whitespace-normal">{item.title}</h3>
 
-                                    <div className="flex flex-col gap-1 text-[11px] font-medium text-white/90 mb-2 w-full">
+                                    {/* Desktop Only Elements */}
+                                    <div className="hidden md:block w-12 h-0.5 bg-white/50 mb-2" />
+                                    <div className="hidden md:flex flex-col gap-1 text-[11px] font-medium text-white/90 mb-2 w-full">
                                         <p className="line-clamp-2 leading-relaxed">{item.description}</p>
                                         <div className="mt-1 flex flex-col gap-0.5 opacity-80">
                                             <span>• Premium Quality</span>
                                             <span>• Verified</span>
                                         </div>
                                     </div>
-
-                                    <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mt-auto mb-1 hover:text-white/80 transition-colors bg-white/20 dark:bg-black/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                                    <button className="hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-widest mt-auto mb-1 hover:text-white/80 transition-colors bg-white/20 dark:bg-black/20 px-4 py-2 rounded-full backdrop-blur-sm">
                                         <LucideIcons.Flower2 className="w-3 h-3" />
                                         More
                                     </button>
                                 </div>
 
                                 {/* Reflection Shadow Effect */}
-                                <div className={`absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 ${bgColor} opacity-20 blur-xl rounded-[100%]`} />
-                                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-full h-8 bg-gradient-to-b from-current to-transparent opacity-10 transform scale-y-[-1] mask-image-gradient" style={{ color: bgColor }} />
+                                <div className={`absolute -bottom-1 md:-bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-2 md:h-8 ${bgColor} opacity-20 blur-md md:blur-xl rounded-[100%]`} />
                             </motion.div>
                         );
                     })}
                 </div>
             </section>
-            <section className="w-full bg-primary py-24 overflow-hidden">
+            <section className="w-full bg-primary py-6 md:py-24 overflow-hidden">
                 <div className="container mx-auto px-4">
-                    <div className="flex flex-col items-center text-center mb-12">
-                        <h2 className="text-5xl md:text-7xl font-['Oswald'] font-black text-primary-foreground tracking-tighter uppercase italic drop-shadow-sm">
+                    <div className="flex flex-col items-center text-center mb-4 md:mb-12">
+                        <h2 className="text-4xl md:text-7xl font-['Oswald'] font-black text-primary-foreground tracking-tighter uppercase italic drop-shadow-sm">
                             {homePage.specialOffers?.title || 'Special Offers'}
                         </h2>
-                        <div className="h-1.5 w-32 bg-primary-foreground mt-4 rounded-full shadow-glow" />
+                        <div className="h-1.5 w-32 bg-primary-foreground mt-4 rounded-full shadow-glow hidden md:block" />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center justify-items-center relative">
+                    <div className="grid grid-cols-3 gap-2 md:grid-cols-3 md:gap-8 items-center justify-items-center relative z-20 px-0 md:px-0">
                         {/* Background Glow */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-white/20 blur-[100px] rounded-full -z-10" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-white/20 blur-[100px] rounded-full -z-10 hidden md:block" />
 
-                        <AnimatePresence mode='wait'>
-                            {/* Image 1 - Left Tilted */}
-                            <motion.div
-                                key={`ad-left-${adIndex}`}
-                                initial={{ opacity: 0, x: -50, rotate: -10 }}
-                                animate={{ opacity: 1, x: 0, rotate: -5 }}
-                                exit={{ opacity: 0, x: -50, rotate: -10 }}
-                                whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-                                transition={{ duration: 0.5 }}
-                                className="w-full max-w-sm"
-                            >
-                                <img src={currentOfferSet[0] || '/placeholder.jpg'} alt="Ad 1" className="w-full h-auto drop-shadow-2xl hover:drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300" />
-                            </motion.div>
+                        <div className="w-full flex justify-center">
+                            <img src={currentOfferSet[0] || '/placeholder.jpg'} alt="Ad 1" className="w-full h-auto drop-shadow-lg rounded-lg md:rounded-xl" />
+                        </div>
 
-                            {/* Image 2 - Center Pop-up (Main) */}
-                            <motion.div
-                                key={`ad-center-${adIndex}`}
-                                initial={{ opacity: 0, scale: 0.5, y: 100 }}
-                                animate={{ opacity: 1, scale: 1.2, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.5, y: 100 }}
-                                whileHover={{ scale: 1.3 }}
-                                transition={{ duration: 0.5, type: "spring", bounce: 0.5 }}
-                                className="w-full max-w-sm z-20"
-                            >
-                                <img src={currentOfferSet[1] || '/placeholder.jpg'} alt="Ad Main" className="w-full h-auto drop-shadow-[0_35px_60px_rgba(0,0,0,0.6)]" />
-                            </motion.div>
+                        <div className="w-full flex justify-center md:scale-125 z-10">
+                            <img src={currentOfferSet[1] || '/placeholder.jpg'} alt="Ad Main" className="w-full h-auto drop-shadow-xl rounded-lg md:rounded-xl" />
+                        </div>
 
-                            {/* Image 3 - Right Tilted */}
-                            <motion.div
-                                key={`ad-right-${adIndex}`}
-                                initial={{ opacity: 0, x: 50, rotate: 10 }}
-                                animate={{ opacity: 1, x: 0, rotate: 5 }}
-                                exit={{ opacity: 0, x: 50, rotate: 10 }}
-                                whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-                                transition={{ duration: 0.5 }}
-                                className="w-full max-w-sm"
-                            >
-                                <img src={currentOfferSet[2] || '/placeholder.jpg'} alt="Ad 2" className="w-full h-auto drop-shadow-2xl hover:drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300" />
-                            </motion.div>
-                        </AnimatePresence>
+                        <div className="w-full flex justify-center">
+                            <img src={currentOfferSet[2] || '/placeholder.jpg'} alt="Ad 2" className="w-full h-auto drop-shadow-lg rounded-lg md:rounded-xl" />
+                        </div>
                     </div>
                 </div>
             </section>
