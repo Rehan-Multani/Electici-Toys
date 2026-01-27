@@ -63,15 +63,15 @@ export default function ProductList() {
     }, [products, searchQuery, statusFilter, categoryFilter]);
 
     return (
-        <div className="p-8 space-y-8">
+        <div className="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-4xl font-black italic tracking-tighter uppercase mb-2">Inventory</h1>
-                    <p className="text-muted-foreground font-medium italic">Manage your toy collection ({products.length} products)</p>
+                    <h1 className="text-2xl md:text-4xl font-black italic tracking-tighter uppercase mb-2">Inventory</h1>
+                    <p className="text-xs md:text-base text-muted-foreground font-medium italic">Manage your toy collection ({products.length} products)</p>
                 </div>
                 <Button
                     onClick={() => navigate('/admin/products/new')}
-                    className="rounded-full font-black italic tracking-widest uppercase px-6 py-4 h-auto shadow-xl shadow-primary/20 group transform hover:scale-105 transition-all text-sm"
+                    className="rounded-full font-black italic tracking-widest uppercase px-6 py-2 h-auto shadow-xl shadow-primary/20 group transform hover:scale-105 transition-all text-[10px] md:text-sm"
                 >
                     <Plus className="mr-2 h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
                     Add New Toy
@@ -87,14 +87,14 @@ export default function ProductList() {
                         placeholder="SEARCH TOYS..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-secondary/5 border border-secondary/20 rounded-2xl pl-12 pr-4 py-2.5 outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all font-bold uppercase tracking-widest text-[11px]"
+                        className="w-full bg-secondary/5 border border-secondary/20 rounded-2xl pl-12 pr-4 py-2 outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all font-bold uppercase tracking-widest text-[11px]"
                     />
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                     {/* Category Dropdown */}
                     <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                        <SelectTrigger className="w-full sm:w-[200px] rounded-[1.5rem] border-none shadow-lg shadow-black/5 bg-white font-black italic uppercase tracking-widest text-[11px] h-auto py-3.5 hover:bg-white/90 transition-all">
+                        <SelectTrigger className="w-full sm:w-[200px] rounded-[1.5rem] border-none shadow-lg shadow-black/5 bg-white font-black italic uppercase tracking-widest text-[11px] h-auto py-3 hover:bg-white/90 transition-all">
                             <SelectValue>
                                 {categoryFilter === 'All' ? 'ALL CATEGORIES' : categoryFilter.toUpperCase()}
                             </SelectValue>
@@ -110,7 +110,7 @@ export default function ProductList() {
 
                     {/* Status Dropdown */}
                     <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger className="w-full sm:w-[180px] rounded-[1.5rem] border-none shadow-lg shadow-black/5 bg-white font-black italic uppercase tracking-widest text-[11px] h-auto py-3.5 hover:bg-white/90 transition-all">
+                        <SelectTrigger className="w-full sm:w-[180px] rounded-[1.5rem] border-none shadow-lg shadow-black/5 bg-white font-black italic uppercase tracking-widest text-[11px] h-auto py-3 hover:bg-white/90 transition-all">
                             <SelectValue>
                                 {statusFilter === 'All' ? 'ALL STATUS' : statusFilter.toUpperCase()}
                             </SelectValue>
@@ -132,12 +132,12 @@ export default function ProductList() {
                     <table className="w-full text-left">
                         <thead className="bg-secondary/10 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground border-b border-secondary/10">
                             <tr>
-                                <th className="px-8 py-6">Product</th>
-                                <th className="px-8 py-6">Category</th>
-                                <th className="px-8 py-6">Price</th>
-                                <th className="px-8 py-6">Stock</th>
-                                <th className="px-8 py-6">Status</th>
-                                <th className="px-8 py-6 text-right">Actions</th>
+                                <th className="px-4 py-3 md:px-6 md:py-4">Product</th>
+                                <th className="px-4 py-3 md:px-6 md:py-4">Category</th>
+                                <th className="px-4 py-3 md:px-6 md:py-4">Price</th>
+                                <th className="px-4 py-3 md:px-6 md:py-4">Stock</th>
+                                <th className="px-4 py-3 md:px-6 md:py-4">Status</th>
+                                <th className="px-4 py-3 md:px-6 md:py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-secondary/10">
@@ -151,9 +151,9 @@ export default function ProductList() {
                                         exit={{ opacity: 0, scale: 0.95 }}
                                         className="group hover:bg-secondary/10 transition-colors"
                                     >
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-3 md:px-6 md:py-4">
                                             <div className="flex items-center gap-4">
-                                                <div className="h-16 w-16 bg-background rounded-2xl overflow-hidden border border-secondary/20 flex-shrink-0 relative">
+                                                <div className="h-12 w-12 md:h-16 md:w-16 bg-background rounded-2xl overflow-hidden border border-secondary/20 flex-shrink-0 relative">
                                                     {product.image ? (
                                                         <>
                                                             <img
@@ -173,24 +173,24 @@ export default function ProductList() {
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold uppercase italic tracking-tight">{product.name}</p>
+                                                    <p className="font-bold uppercase italic tracking-tight text-xs md:text-sm">{product.name}</p>
                                                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-0.5">ID: {product.id}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-3 md:px-6 md:py-4">
                                             <Badge variant="secondary" className="bg-secondary/30 text-[10px] uppercase tracking-widest">{product.category}</Badge>
                                         </td>
-                                        <td className="px-8 py-6">
-                                            <p className="font-black italic">₹{product.price.toLocaleString()}</p>
+                                        <td className="px-4 py-3 md:px-6 md:py-4">
+                                            <p className="font-black italic text-xs md:text-sm">₹{product.price.toLocaleString()}</p>
                                         </td>
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-3 md:px-6 md:py-4">
                                             <div className="flex flex-col gap-1">
                                                 <p className={cn(
-                                                    "font-bold text-sm",
+                                                    "font-bold text-xs md:text-sm",
                                                     product.stock < 10 ? "text-red-500" : "text-foreground"
                                                 )}>{product.stock} pcs</p>
-                                                <div className="w-24 h-1 bg-secondary/20 rounded-full overflow-hidden">
+                                                <div className="w-16 md:w-24 h-1 bg-secondary/20 rounded-full overflow-hidden">
                                                     <div
                                                         className={cn(
                                                             "h-full rounded-full transition-all duration-1000",
@@ -201,7 +201,7 @@ export default function ProductList() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-3 md:px-6 md:py-4">
                                             <div className="flex items-center gap-3">
                                                 <Badge
                                                     variant={product.status === 'Active' ? 'success' : 'outline'}
@@ -212,10 +212,10 @@ export default function ProductList() {
                                                 </Badge>
                                             </div>
                                         </td>
-                                        <td className="px-8 py-6 text-right">
+                                        <td className="px-4 py-3 md:px-6 md:py-4 text-right">
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary/20">
+                                                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary/20 h-8 w-8">
                                                         <MoreVertical className="h-4 w-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>

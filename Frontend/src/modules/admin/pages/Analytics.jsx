@@ -83,24 +83,24 @@ export default function Analytics() {
     }
 
     return (
-        <div className="p-8 space-y-8 pb-20">
+        <div className="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 pb-20">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-4xl font-black italic tracking-tighter uppercase mb-2">Detailed Analytics</h1>
-                    <p className="text-muted-foreground font-medium italic">Deep dive into your store's performance metrics</p>
+                    <h1 className="text-2xl md:text-4xl font-black italic tracking-tighter uppercase mb-1 md:mb-2">Detailed Analytics</h1>
+                    <p className="text-xs md:text-base text-muted-foreground font-medium italic">Deep dive into your store's performance metrics</p>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-3 md:gap-4 w-full md:w-auto">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="outline"
                                 className={cn(
-                                    "rounded-3xl px-6 py-6 h-auto font-black italic uppercase tracking-widest text-xs justify-between min-w-[200px] border-none bg-white shadow-lg shadow-black/5 hover:bg-white/90 hover:shadow-xl hover:shadow-primary/5 transition-all outline-none ring-0 focus:ring-0 data-[state=open]:rounded-b-none data-[state=open]:shadow-none",
+                                    "rounded-3xl px-4 py-3 md:px-6 md:py-6 h-auto font-black italic uppercase tracking-widest text-[10px] md:text-xs justify-between min-w-[140px] md:min-w-[200px] border-none bg-white shadow-lg shadow-black/5 hover:bg-white/90 hover:shadow-xl hover:shadow-primary/5 transition-all outline-none ring-0 focus:ring-0 data-[state=open]:rounded-b-none data-[state=open]:shadow-none w-full md:w-auto",
                                     "text-foreground"
                                 )}
                             >
                                 <span className="truncate">{timeRange.toUpperCase()}</span>
-                                <ChevronDown className="ml-2 h-4 w-4 opacity-30" strokeWidth={3} />
+                                <ChevronDown className="ml-2 h-3 w-3 md:h-4 md:w-4 opacity-30" strokeWidth={3} />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
@@ -125,20 +125,20 @@ export default function Analytics() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button variant="outline" className="rounded-full font-bold uppercase tracking-widest text-[10px] border-secondary/20">
-                        <Download className="mr-2 h-4 w-4" /> Export CSV
+                    <Button variant="outline" className="rounded-full font-bold uppercase tracking-widest text-[10px] border-secondary/20 h-auto px-4 md:px-6">
+                        <Download className="mr-0 md:mr-2 h-4 w-4" /> <span className="hidden md:inline">Export CSV</span>
                     </Button>
                 </div>
             </div>
 
             {/* Performance Highlight */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 bg-secondary/10 border border-secondary/20 rounded-[2.5rem] p-8 space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                <div className="lg:col-span-2 bg-secondary/10 border border-secondary/20 rounded-[2rem] p-6 md:p-8 space-y-6 md:space-y-8">
                     <div className="flex justify-between items-center">
-                        <h3 className="text-xl font-black italic uppercase tracking-tighter">Order Volume vs Revenue</h3>
+                        <h3 className="text-lg md:text-xl font-black italic uppercase tracking-tighter">Order Volume vs Revenue</h3>
                     </div>
 
-                    <div className="h-[400px] w-full">
+                    <div className="h-[300px] md:h-[400px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={revenueChartData}>
                                 <defs>
@@ -199,9 +199,9 @@ export default function Analytics() {
                     </div>
                 </div>
 
-                <div className="bg-secondary/10 border border-secondary/20 rounded-[2.5rem] p-8 space-y-8">
-                    <h3 className="text-xl font-black italic uppercase tracking-tighter">Sales by Category</h3>
-                    <div className="h-[300px] w-full">
+                <div className="bg-secondary/10 border border-secondary/20 rounded-[2rem] p-6 md:p-8 space-y-6 md:space-y-8">
+                    <h3 className="text-lg md:text-xl font-black italic uppercase tracking-tighter">Sales by Category</h3>
+                    <div className="h-[250px] md:h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
@@ -235,11 +235,11 @@ export default function Analytics() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                 {/* Product Sales Performance */}
-                <div className="bg-secondary/10 border border-secondary/20 rounded-[2.5rem] p-8">
-                    <h3 className="text-xl font-black italic uppercase tracking-tighter mb-8">Top Toys Performance</h3>
-                    <div className="h-[350px] w-full">
+                <div className="bg-secondary/10 border border-secondary/20 rounded-[2rem] p-6 md:p-8">
+                    <h3 className="text-lg md:text-xl font-black italic uppercase tracking-tighter mb-6 md:mb-8">Top Toys Performance</h3>
+                    <div className="h-[300px] md:h-[350px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={topProductsData} layout="vertical">
                                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgba(255,255,255,0.05)" />
@@ -260,34 +260,34 @@ export default function Analytics() {
                 </div>
 
                 {/* Key Insights */}
-                <div className="bg-secondary/10 border border-secondary/20 rounded-[2.5rem] p-8 space-y-6">
-                    <h3 className="text-xl font-black italic uppercase tracking-tighter mb-4">Key Insights</h3>
+                <div className="bg-secondary/10 border border-secondary/20 rounded-[2rem] p-6 md:p-8 space-y-6">
+                    <h3 className="text-lg md:text-xl font-black italic uppercase tracking-tighter mb-4">Key Insights</h3>
                     <div className="space-y-6">
-                        <div className="p-6 bg-background/40 border border-secondary/10 rounded-2xl flex gap-6 items-center">
-                            <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                                <TrendingUp className="h-6 w-6" />
+                        <div className="p-4 md:p-6 bg-background/40 border border-secondary/10 rounded-2xl flex gap-4 md:gap-6 items-center">
+                            <div className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                <TrendingUp className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
                             <div>
-                                <p className="text-sm font-black uppercase tracking-tight italic">Store Performance</p>
-                                <p className="text-xs text-muted-foreground italic mt-1">Total revenue recorded: ₹{(dashboardData?.totalRevenue || 0).toLocaleString()}.</p>
+                                <p className="text-xs md:text-sm font-black uppercase tracking-tight italic">Store Performance</p>
+                                <p className="text-[10px] md:text-xs text-muted-foreground italic mt-1">Total revenue recorded: ₹{(dashboardData?.totalRevenue || 0).toLocaleString()}.</p>
                             </div>
                         </div>
-                        <div className="p-6 bg-background/40 border border-secondary/10 rounded-2xl flex gap-6 items-center">
-                            <div className="h-12 w-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500">
-                                <BarChart2 className="h-6 w-6" />
+                        <div className="p-4 md:p-6 bg-background/40 border border-secondary/10 rounded-2xl flex gap-4 md:gap-6 items-center">
+                            <div className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                                <BarChart2 className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
                             <div>
-                                <p className="text-sm font-black uppercase tracking-tight italic">Order Volume</p>
-                                <p className="text-xs text-muted-foreground italic mt-1">Average order value is ₹{Math.round(summary.avgOrderValue).toLocaleString()}.</p>
+                                <p className="text-xs md:text-sm font-black uppercase tracking-tight italic">Order Volume</p>
+                                <p className="text-[10px] md:text-xs text-muted-foreground italic mt-1">Average order value is ₹{Math.round(summary.avgOrderValue).toLocaleString()}.</p>
                             </div>
                         </div>
-                        <div className="p-6 bg-background/40 border border-secondary/10 rounded-2xl flex gap-6 items-center">
-                            <div className="h-12 w-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500">
-                                <Calendar className="h-6 w-6" />
+                        <div className="p-4 md:p-6 bg-background/40 border border-secondary/10 rounded-2xl flex gap-4 md:gap-6 items-center">
+                            <div className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <Calendar className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
                             <div>
-                                <p className="text-sm font-black uppercase tracking-tight italic">Product Catalog</p>
-                                <p className="text-xs text-muted-foreground italic mt-1">You currently have {dashboardData?.activeProducts || 0} active products in your catalog.</p>
+                                <p className="text-xs md:text-sm font-black uppercase tracking-tight italic">Product Catalog</p>
+                                <p className="text-[10px] md:text-xs text-muted-foreground italic mt-1">You currently have {dashboardData?.activeProducts || 0} active products in your catalog.</p>
                             </div>
                         </div>
                     </div>

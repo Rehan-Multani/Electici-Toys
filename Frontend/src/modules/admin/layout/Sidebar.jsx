@@ -47,7 +47,7 @@ export function Sidebar({ isOpen, onClose, onLogout }) {
                             end={item.path === '/admin'}
                             onClick={() => mobile && onClose()}
                             className={({ isActive }) => cn(
-                                "group flex items-center gap-3 px-4 py-3 rounded-xl font-bold uppercase tracking-wide text-[11px] transition-all duration-300 ease-in-out border border-transparent flex-shrink-0",
+                                "group flex items-center gap-3 px-4 py-2 rounded-xl font-bold uppercase tracking-wide text-[11px] transition-all duration-300 ease-in-out border border-transparent flex-shrink-0",
                                 isActive
                                     ? "bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02] border-primary/10"
                                     : "text-slate-400 hover:bg-white/10 hover:text-white hover:shadow-md hover:border-white/5 hover:scale-[1.02]"
@@ -56,10 +56,10 @@ export function Sidebar({ isOpen, onClose, onLogout }) {
                             {({ isActive }) => (
                                 <>
                                     <div className={cn(
-                                        "p-2 rounded-xl transition-colors duration-300 shadow-sm",
+                                        "p-1.5 rounded-lg transition-colors duration-300 shadow-sm",
                                         isActive ? "bg-white/20 shadow-inner" : "bg-white/5 group-hover:bg-primary/20"
                                     )}>
-                                        <item.icon className={cn("h-5 w-5", isActive ? "text-white" : "text-slate-400 group-hover:text-primary")} strokeWidth={2.5} />
+                                        <item.icon className={cn("h-4 w-4", isActive ? "text-white" : "text-slate-400 group-hover:text-primary")} strokeWidth={2.5} />
                                     </div>
                                     <span className="truncate">{item.name}</span>
                                 </>
@@ -72,9 +72,9 @@ export function Sidebar({ isOpen, onClose, onLogout }) {
             <div className="pt-4 mt-auto px-2 pb-safe flex-shrink-0">
                 <button
                     onClick={onLogout}
-                    className="group flex items-center justify-center gap-3 px-6 py-4 w-full rounded-xl font-black italic uppercase tracking-widest text-xs text-red-400 bg-red-500/10 hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
+                    className="group flex items-center justify-center gap-3 px-6 py-2.5 w-full rounded-xl font-black italic uppercase tracking-widest text-xs text-red-400 bg-red-500/10 hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
                 >
-                    <LogOut className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+                    <LogOut className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
                     <span>LOG OUT</span>
                 </button>
             </div>

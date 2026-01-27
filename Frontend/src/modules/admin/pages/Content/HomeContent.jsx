@@ -217,109 +217,111 @@ export function HomeContent() {
     }
 
     return (
-        <div className="p-6 max-w-7xl mx-auto relative">
+        <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto relative pb-20">
             {loading && (
                 <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-50 flex items-center justify-center rounded-xl">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
             )}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 md:mb-8">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tighter uppercase">Home Page Content</h1>
-                    <p className="text-muted-foreground mt-2">Manage hero section, trust markers, categories, and testimonials</p>
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter uppercase">Home Page Content</h1>
+                    <p className="text-xs md:text-sm text-muted-foreground mt-1 font-medium italic">Manage hero section, trust markers, categories, and testimonials</p>
                 </div>
-                <div className="flex gap-3">
-                    <Button variant="outline" onClick={handleReset} className="gap-2" disabled={loading}>
-                        <RotateCcw className="h-4 w-4" />
-                        Discard Changes
+                <div className="flex gap-2 w-full md:w-auto">
+                    <Button variant="outline" onClick={handleReset} className="flex-1 md:flex-none gap-2 text-xs md:text-sm h-10 md:h-11" disabled={loading}>
+                        <RotateCcw className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                        Discard
                     </Button>
-                    <Button onClick={handleSave} className="gap-2" disabled={loading}>
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    <Button onClick={handleSave} className="flex-1 md:flex-none gap-2 text-xs md:text-sm h-10 md:h-11 font-bold tracking-wide" disabled={loading}>
+                        {loading ? <Loader2 className="h-3.5 w-3.5 md:h-4 md:w-4 animate-spin" /> : <Save className="h-3.5 w-3.5 md:h-4 md:w-4" />}
                         Save Changes
                     </Button>
                 </div>
             </div>
 
-            <Tabs defaultValue="hero" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-5">
-                    <TabsTrigger value="hero">Hero Section</TabsTrigger>
-                    <TabsTrigger value="trust">Trust Markers</TabsTrigger>
-                    <TabsTrigger value="categories">Categories</TabsTrigger>
-                    <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
-                    <TabsTrigger value="offers">Special Offers</TabsTrigger>
+            <Tabs defaultValue="hero" className="space-y-4 md:space-y-6">
+                <TabsList className="w-full h-auto p-1 bg-muted/50 rounded-xl flex flex-wrap md:grid md:grid-cols-5 gap-1">
+                    <TabsTrigger value="hero" className="flex-1 text-[10px] md:text-xs font-bold uppercase tracking-wider py-2 md:py-2.5">Hero</TabsTrigger>
+                    <TabsTrigger value="trust" className="flex-1 text-[10px] md:text-xs font-bold uppercase tracking-wider py-2 md:py-2.5">Trust</TabsTrigger>
+                    <TabsTrigger value="categories" className="flex-1 text-[10px] md:text-xs font-bold uppercase tracking-wider py-2 md:py-2.5">Categories</TabsTrigger>
+                    <TabsTrigger value="testimonials" className="flex-1 text-[10px] md:text-xs font-bold uppercase tracking-wider py-2 md:py-2.5">Testimonials</TabsTrigger>
+                    <TabsTrigger value="offers" className="flex-1 text-[10px] md:text-xs font-bold uppercase tracking-wider py-2 md:py-2.5">Offers</TabsTrigger>
                 </TabsList>
 
                 {/* Hero Section Tab */}
                 <TabsContent value="hero" className="space-y-4">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Hero Section</CardTitle>
-                            <CardDescription>Main banner content and call-to-action</CardDescription>
+                    <Card className="border-secondary/20 shadow-sm">
+                        <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                            <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Hero Section</CardTitle>
+                            <CardDescription className="text-xs md:text-sm">Main banner content and call-to-action</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-6">
+                        <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
                             <div className="space-y-2">
-                                <Label>Background Image URL</Label>
+                                <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Background Image URL</Label>
                                 <Input
                                     value={homeData.hero.image || (homeData.hero.images && homeData.hero.images[0]) || ''}
                                     onChange={(e) => updateHero('image', e.target.value)}
                                     placeholder="/hero.png"
+                                    className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                 />
-                                <p className="text-xs text-muted-foreground">Recommended size: 1920x1080px</p>
+                                <p className="text-[9px] md:text-[10px] text-muted-foreground ml-1">Recommended size: 1920x1080px</p>
                             </div>
 
                             <div className="space-y-2">
-                                <Label>Main Heading</Label>
+                                <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Main Heading</Label>
                                 <Input
                                     value={homeData.hero.heading}
                                     onChange={(e) => updateHero('heading', e.target.value)}
                                     placeholder="UNLEASH THE POWER OF PLAY"
-                                    className="text-lg font-bold"
+                                    className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold"
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>CTA Button Text</Label>
+                                    <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">CTA Button Text</Label>
                                     <Input
                                         value={homeData.hero.ctaText}
                                         onChange={(e) => updateHero('ctaText', e.target.value)}
                                         placeholder="SHOP COLLECTION"
+                                        className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>CTA Link</Label>
+                                    <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">CTA Link</Label>
                                     <Input
                                         value="/products"
                                         disabled
-                                        className="bg-secondary/50 font-medium"
+                                        className="h-10 md:h-12 bg-secondary/20 border-secondary/20 text-xs md:text-sm font-medium text-muted-foreground"
                                     />
-                                    <p className="text-[10px] text-muted-foreground italic">Fixed to product collection page.</p>
+                                    <p className="text-[9px] md:text-[10px] text-muted-foreground italic ml-1">Fixed to product collection page.</p>
                                 </div>
                             </div>
 
                             {/* Preview */}
-                            <div className="mt-6 p-6 bg-secondary/20 rounded-lg border-2 border-dashed">
-                                <p className="text-xs text-muted-foreground mb-4 uppercase font-bold">Preview</p>
+                            <div className="mt-4 md:mt-6 p-4 md:p-6 bg-secondary/10 rounded-xl border-2 border-dashed border-secondary/30">
+                                <p className="text-[10px] md:text-xs text-muted-foreground mb-3 uppercase font-bold tracking-widest">Preview</p>
                                 <div className="space-y-3">
-                                    <h2 className="text-3xl font-black tracking-tighter uppercase italic">{homeData.hero.heading}</h2>
-                                    <Button className="rounded-full font-black italic">{homeData.hero.ctaText}</Button>
+                                    <h2 className="text-2xl md:text-3xl font-black tracking-tighter uppercase italic">{homeData.hero.heading}</h2>
+                                    <Button className="rounded-full font-black italic h-10 px-6 text-xs md:text-sm">{homeData.hero.ctaText}</Button>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
+                    <Card className="border-secondary/20 shadow-sm">
+                        <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>Featured Section</CardTitle>
-                                    <CardDescription>Title and subtitle for products showcase</CardDescription>
+                                    <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Featured Section</CardTitle>
+                                    <CardDescription className="text-xs md:text-sm">Title and subtitle for products showcase</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent className="space-y-4">
+                        <CardContent className="p-4 md:p-6 space-y-4">
                             <div className="space-y-2">
-                                <Label>Section Title</Label>
+                                <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Section Title</Label>
                                 <Input
                                     value={homeData.featuredSection.title}
                                     onChange={(e) => setHomeData(prev => ({
@@ -327,11 +329,11 @@ export function HomeContent() {
                                         featuredSection: { ...prev.featuredSection, title: e.target.value }
                                     }))}
                                     placeholder="THE HIT LIST"
-                                    className="font-bold"
+                                    className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Section Subtitle</Label>
+                                <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Section Subtitle</Label>
                                 <Input
                                     value={homeData.featuredSection.subtitle}
                                     onChange={(e) => setHomeData(prev => ({
@@ -339,11 +341,12 @@ export function HomeContent() {
                                         featuredSection: { ...prev.featuredSection, subtitle: e.target.value }
                                     }))}
                                     placeholder="Our most-wanted electric wonders."
+                                    className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                 />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>CTA Text</Label>
+                                    <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">CTA Text</Label>
                                     <Input
                                         value={homeData.featuredSection.ctaText}
                                         onChange={(e) => setHomeData(prev => ({
@@ -351,16 +354,17 @@ export function HomeContent() {
                                             featuredSection: { ...prev.featuredSection, ctaText: e.target.value }
                                         }))}
                                         placeholder="All Products"
+                                        className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>CTA Link</Label>
+                                    <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">CTA Link</Label>
                                     <Input
                                         value="/products"
                                         disabled
-                                        className="bg-secondary/50 font-medium"
+                                        className="h-10 md:h-12 bg-secondary/20 border-secondary/20 text-xs md:text-sm font-medium text-muted-foreground"
                                     />
-                                    <p className="text-[10px] text-muted-foreground italic">Fixed to product collection page.</p>
+                                    <p className="text-[9px] md:text-[10px] text-muted-foreground italic ml-1">Fixed to product collection page.</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -369,57 +373,57 @@ export function HomeContent() {
 
                 {/* Trust Markers Tab */}
                 <TabsContent value="trust" className="space-y-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <p className="text-sm text-muted-foreground">Manage trust markers (warranty, shipping, etc.)</p>
-                        <Button onClick={addTrustMarker} size="sm" className="gap-2">
-                            <Plus className="h-4 w-4" />
+                    <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs md:text-sm text-muted-foreground font-medium italic">Manage trust markers (warranty, shipping, etc.)</p>
+                        <Button onClick={addTrustMarker} size="sm" className="gap-2 h-8 md:h-9 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full">
+                            <Plus className="h-3.5 w-3.5 md:h-4 md:w-4" />
                             Add Marker
                         </Button>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {homeData.trustMarkers.map((marker, index) => (
-                            <Card key={marker.id}>
-                                <CardHeader>
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="text-lg">Marker {index + 1}</CardTitle>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => removeTrustMarker(index)}
-                                            className="text-destructive hover:text-destructive"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+                            <Card key={marker.id} className="border-secondary/20 shadow-sm relative group">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => removeTrustMarker(index)}
+                                    className="absolute right-2 top-2 h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100 z-10"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                                <CardHeader className="p-4 pb-2">
+                                    <CardTitle className="text-sm md:text-base font-bold uppercase tracking-tight">Marker {index + 1}</CardTitle>
                                 </CardHeader>
-                                <CardContent className="space-y-4">
+                                <CardContent className="p-4 pt-0 space-y-3">
                                     <div className="space-y-2">
-                                        <Label>Icon Name (Lucide)</Label>
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Icon Name (Lucide)</Label>
                                         <Input
                                             value={marker.icon}
                                             onChange={(e) => updateTrustMarker(index, 'icon', e.target.value)}
                                             placeholder="Shield"
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="text-[9px] md:text-[10px] text-muted-foreground ml-1">
                                             Use: Shield, Truck, CreditCard, RotateCcw, etc.
                                         </p>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>Title</Label>
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Title</Label>
                                         <Input
                                             value={marker.title}
                                             onChange={(e) => updateTrustMarker(index, 'title', e.target.value)}
                                             placeholder="1-YEAR WARRANTY"
-                                            className="font-bold uppercase"
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold uppercase"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>Description</Label>
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Description</Label>
                                         <Input
                                             value={marker.description}
                                             onChange={(e) => updateTrustMarker(index, 'description', e.target.value)}
                                             placeholder="Full peace of mind"
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
                                 </CardContent>
@@ -430,35 +434,33 @@ export function HomeContent() {
 
                 {/* Categories Tab */}
                 <TabsContent value="categories" className="space-y-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <p className="text-sm text-muted-foreground">Manage featured category cards</p>
-                        <Button onClick={addCategory} size="sm" className="gap-2">
-                            <Plus className="h-4 w-4" />
+                    <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs md:text-sm text-muted-foreground font-medium italic">Manage featured category cards</p>
+                        <Button onClick={addCategory} size="sm" className="gap-2 h-8 md:h-9 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full">
+                            <Plus className="h-3.5 w-3.5 md:h-4 md:w-4" />
                             Add Category
                         </Button>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {homeData.categories.map((category, index) => (
-                            <Card key={category.id}>
-                                <CardHeader>
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle>{category.name}</CardTitle>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => removeCategory(index)}
-                                            className="text-destructive hover:text-destructive"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+                            <Card key={category.id} className="border-secondary/20 shadow-sm relative group">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => removeCategory(index)}
+                                    className="absolute right-2 top-2 h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100 z-10"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                                <CardHeader className="p-4 pb-2">
+                                    <CardTitle className="text-sm md:text-base font-bold uppercase tracking-tight">{category.name}</CardTitle>
                                 </CardHeader>
-                                <CardContent className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2 col-span-2">
-                                        <Label>Link to Backend Category</Label>
+                                <CardContent className="p-4 pt-0 grid grid-cols-2 gap-3">
+                                    <div className="space-y-1 col-span-2">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Link to Backend Category</Label>
                                         <select
-                                            className="w-full flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                            className="w-full flex h-9 md:h-10 rounded-xl border border-secondary/20 bg-secondary/5 px-3 py-2 text-xs md:text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
                                             value={category.backendId}
                                             onChange={(e) => {
                                                 const selectedCat = backendCategories.find(c => c._id === e.target.value);
@@ -466,7 +468,6 @@ export function HomeContent() {
                                                     updateCategory(index, 'backendId', selectedCat._id);
                                                     updateCategory(index, 'name', selectedCat.categoryName);
                                                     updateCategory(index, 'ctaLink', `/products?category=${selectedCat.categoryName.toLowerCase()}`);
-                                                    // Only update these if they are still defaults or empty
                                                     if (!category.title || category.title === 'New\nCategory') {
                                                         updateCategory(index, 'title', selectedCat.categoryName.split(' ').join('\n'));
                                                     }
@@ -483,65 +484,72 @@ export function HomeContent() {
                                             ))}
                                         </select>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Display Name</Label>
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Display Name</Label>
                                         <Input
                                             value={category.name}
                                             onChange={(e) => updateCategory(index, 'name', e.target.value)}
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Display Title</Label>
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Display Title</Label>
                                         <Input
                                             value={category.title}
                                             onChange={(e) => updateCategory(index, 'title', e.target.value)}
                                             placeholder="Hover\nBoards"
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
-                                        <p className="text-xs text-muted-foreground">Use \n for line breaks</p>
                                     </div>
-                                    <div className="space-y-2 col-span-2">
-                                        <Label>Description</Label>
+                                    <div className="space-y-1 col-span-2">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Description</Label>
                                         <Input
                                             value={category.description}
                                             onChange={(e) => updateCategory(index, 'description', e.target.value)}
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
-                                    <div className="space-y-2 col-span-2">
-                                        <Label>Image URL</Label>
+                                    <div className="space-y-1 col-span-2">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Image URL</Label>
                                         <Input
                                             value={category.image}
                                             onChange={(e) => updateCategory(index, 'image', e.target.value)}
                                             placeholder="/assets/products/..."
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>CTA Text</Label>
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">CTA Text</Label>
                                         <Input
                                             value={category.ctaText}
                                             onChange={(e) => updateCategory(index, 'ctaText', e.target.value)}
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>CTA Link</Label>
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">CTA Link</Label>
                                         <Input
                                             value={category.ctaLink}
                                             onChange={(e) => updateCategory(index, 'ctaLink', e.target.value)}
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Background Color</Label>
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Background</Label>
                                         <Input
                                             value={category.bgColor}
                                             onChange={(e) => updateCategory(index, 'bgColor', e.target.value)}
                                             placeholder="primary/10"
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Border Color (Hover)</Label>
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Border (Hover)</Label>
                                         <Input
                                             value={category.borderColor}
                                             onChange={(e) => updateCategory(index, 'borderColor', e.target.value)}
                                             placeholder="primary/30"
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
                                 </CardContent>
@@ -551,71 +559,72 @@ export function HomeContent() {
                 </TabsContent>
 
                 {/* Testimonials Tab */}
-                {/* Testimonials Tab */}
                 <TabsContent value="testimonials" className="space-y-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <p className="text-sm text-muted-foreground">Manage customer testimonials</p>
-                        <Button onClick={addTestimonial} size="sm" className="gap-2">
-                            <Plus className="h-4 w-4" />
+                    <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs md:text-sm text-muted-foreground font-medium italic">Manage customer testimonials</p>
+                        <Button onClick={addTestimonial} size="sm" className="gap-2 h-8 md:h-9 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full">
+                            <Plus className="h-3.5 w-3.5 md:h-4 md:w-4" />
                             Add Testimonial
                         </Button>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {testimonials.map((testimonial, index) => (
-                            <Card key={testimonial.id}>
-                                <CardHeader>
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="text-lg">Testimonial {index + 1}</CardTitle>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => removeTestimonial(index)}
-                                            className="text-destructive hover:text-destructive"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+                            <Card key={testimonial.id} className="border-secondary/20 shadow-sm relative group">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => removeTestimonial(index)}
+                                    className="absolute right-2 top-2 h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100 z-10"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                                <CardHeader className="p-4 pb-2">
+                                    <CardTitle className="text-sm md:text-base font-bold uppercase tracking-tight">Testimonial {index + 1}</CardTitle>
                                 </CardHeader>
-                                <CardContent className="space-y-4">
+                                <CardContent className="p-4 pt-0 space-y-3">
                                     <div className="space-y-2">
-                                        <Label>Customer Name</Label>
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Customer Name</Label>
                                         <Input
                                             value={testimonial.name}
                                             onChange={(e) => updateTestimonial(index, 'name', e.target.value)}
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>Customer Image URL</Label>
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Customer Image URL</Label>
                                         <Input
                                             value={testimonial.image}
                                             onChange={(e) => updateTestimonial(index, 'image', e.target.value)}
+                                            className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                         />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-2 gap-3">
                                         <div className="space-y-2">
-                                            <Label>Rating (1-5)</Label>
+                                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Rating (1-5)</Label>
                                             <Input
                                                 type="number"
                                                 min="1"
                                                 max="5"
                                                 value={testimonial.rating}
                                                 onChange={(e) => updateTestimonial(index, 'rating', parseInt(e.target.value))}
+                                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label>Date</Label>
+                                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Date</Label>
                                             <Input
                                                 value={testimonial.date}
                                                 onChange={(e) => updateTestimonial(index, 'date', e.target.value)}
                                                 placeholder="e.g. Monday, Jan 16, 2023"
+                                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                             />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>Testimonial Text</Label>
+                                        <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Testimonial Text</Label>
                                         <textarea
-                                            className="w-full min-h-[100px] flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                            className="w-full min-h-[100px] flex rounded-xl border border-secondary/20 bg-secondary/5 px-3 py-2 text-xs md:text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
                                             value={testimonial.text}
                                             onChange={(e) => updateTestimonial(index, 'text', e.target.value)}
                                         />
@@ -628,14 +637,14 @@ export function HomeContent() {
 
                 {/* Special Offers Tab */}
                 <TabsContent value="offers" className="space-y-4">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Special Offers Section</CardTitle>
-                            <CardDescription>Manage the rotating special offer banners</CardDescription>
+                    <Card className="border-secondary/20 shadow-sm">
+                        <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                            <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Special Offers Section</CardTitle>
+                            <CardDescription className="text-xs md:text-sm">Manage the rotating special offer banners</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-6">
+                        <CardContent className="p-4 md:p-6 space-y-6">
                             <div className="space-y-2">
-                                <Label>Section Title</Label>
+                                <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Section Title</Label>
                                 <Input
                                     value={homeData.specialOffers?.title || 'SPECIAL OFFERS'}
                                     onChange={(e) => setHomeData(prev => ({
@@ -643,13 +652,13 @@ export function HomeContent() {
                                         specialOffers: { ...prev.specialOffers, title: e.target.value }
                                     }))}
                                     placeholder="SPECIAL OFFERS"
-                                    className="font-bold uppercase"
+                                    className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold uppercase"
                                 />
                             </div>
 
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <Label>Offer Sets (3 Images per set)</Label>
+                                    <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Offer Sets (3 Images per set)</Label>
                                     <Button onClick={() => {
                                         setHomeData(prev => ({
                                             ...prev,
@@ -661,17 +670,17 @@ export function HomeContent() {
                                                 ]
                                             }
                                         }));
-                                    }} size="sm" className="gap-2">
-                                        <Plus className="h-4 w-4" />
+                                    }} size="sm" className="gap-2 h-8 md:h-9 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full">
+                                        <Plus className="h-3.5 w-3.5 md:h-4 md:w-4" />
                                         Add Set
                                     </Button>
                                 </div>
 
                                 {(homeData.specialOffers?.offerSets || []).map((set, setIndex) => (
-                                    <Card key={set.id} className="border-secondary/20">
-                                        <CardHeader className="py-4">
+                                    <Card key={set.id} className="border-secondary/20 bg-secondary/5 shadow-sm">
+                                        <CardHeader className="py-3 px-4">
                                             <div className="flex justify-between items-center">
-                                                <CardTitle className="text-base">Set {setIndex + 1}</CardTitle>
+                                                <CardTitle className="text-xs md:text-sm font-bold uppercase tracking-tight">Set {setIndex + 1}</CardTitle>
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
@@ -684,24 +693,24 @@ export function HomeContent() {
                                                             }
                                                         }));
                                                     }}
-                                                    className="text-destructive hover:text-destructive h-8 w-8 p-0"
+                                                    className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10 h-7 w-7 p-0"
                                                 >
-                                                    <Trash2 className="h-4 w-4" />
+                                                    <Trash2 className="h-3.5 w-3.5" />
                                                 </Button>
                                             </div>
                                         </CardHeader>
-                                        <CardContent className="grid gap-4 md:grid-cols-3">
+                                        <CardContent className="p-4 grid gap-4 grid-cols-1 md:grid-cols-3">
                                             {set.images.map((img, imgIndex) => (
                                                 <div key={imgIndex} className="space-y-2">
-                                                    <Label className="text-xs text-muted-foreground">
+                                                    <Label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                                                         {imgIndex === 0 ? 'Left Image' : imgIndex === 1 ? 'Center Image (Main)' : 'Right Image'}
                                                     </Label>
                                                     <div className="relative group">
-                                                        <div className="h-24 w-full bg-secondary/10 rounded-lg overflow-hidden border border-secondary/20 mb-2 flex items-center justify-center">
+                                                        <div className="h-20 md:h-24 w-full bg-white rounded-xl overflow-hidden border border-secondary/20 mb-2 flex items-center justify-center p-2">
                                                             {img ? (
                                                                 <img src={img} alt="Preview" className="h-full w-full object-contain" />
                                                             ) : (
-                                                                <span className="text-xs text-muted-foreground">No Image</span>
+                                                                <span className="text-[10px] text-muted-foreground font-medium">No Image</span>
                                                             )}
                                                         </div>
                                                         <Input
@@ -720,7 +729,7 @@ export function HomeContent() {
                                                                 }));
                                                             }}
                                                             placeholder="/assets/..."
-                                                            className="text-xs"
+                                                            className="h-8 md:h-9 text-[10px] md:text-xs bg-white"
                                                         />
                                                     </div>
                                                 </div>

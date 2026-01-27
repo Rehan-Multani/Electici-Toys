@@ -126,83 +126,84 @@ export function AboutContent() {
     };
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-8">
-            <div className="flex items-center justify-between">
+        <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 pb-20">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tighter uppercase">About Page Content</h1>
-                    <p className="text-muted-foreground mt-2">Manage mission, core values, and company story</p>
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter uppercase">About Page Content</h1>
+                    <p className="text-xs md:text-sm text-muted-foreground mt-1 font-medium italic">Manage mission, core values, and company story</p>
                 </div>
-                <div className="flex gap-3">
-                    <Button variant="outline" onClick={handleReset} className="gap-2">
-                        <RotateCcw className="h-4 w-4" />
+                <div className="flex gap-2 w-full md:w-auto">
+                    <Button variant="outline" onClick={handleReset} className="flex-1 md:flex-none gap-2 text-xs md:text-sm h-10 md:h-11">
+                        <RotateCcw className="h-3.5 w-3.5 md:h-4 md:w-4" />
                         Discard
                     </Button>
-                    <Button onClick={handleSave} className="gap-2" disabled={loading}>
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    <Button onClick={handleSave} className="flex-1 md:flex-none gap-2 text-xs md:text-sm h-10 md:h-11 font-bold tracking-wide" disabled={loading}>
+                        {loading ? <Loader2 className="h-3.5 w-3.5 md:h-4 md:w-4 animate-spin" /> : <Save className="h-3.5 w-3.5 md:h-4 md:w-4" />}
                         {loading ? 'Saving...' : 'Save Changes'}
                     </Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                 {/* Hero / Mission Section */}
-                <Card className="h-fit">
-                    <CardHeader>
-                        <CardTitle>Mission Section</CardTitle>
-                        <CardDescription>The big heading and main mission statement</CardDescription>
+                <Card className="h-fit border-secondary/20 shadow-sm">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                        <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Mission Section</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">The big heading and main mission statement</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
                         <div className="space-y-2">
-                            <Label>Hero Heading</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Hero Heading</Label>
                             <Input
                                 value={aboutData.hero.heading}
                                 onChange={(e) => updateHero('heading', e.target.value)}
                                 placeholder="OUR MISSION"
-                                className="font-bold"
+                                className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Mission Statement</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Mission Statement</Label>
                             <Textarea
                                 value={aboutData.hero.mission}
                                 onChange={(e) => updateHero('mission', e.target.value)}
                                 rows={5}
                                 placeholder="We started ELECTRICI TOYS-HUB..."
+                                className="bg-secondary/5 border-secondary/20 text-xs md:text-sm min-h-[100px] md:min-h-[120px]"
                             />
                         </div>
                     </CardContent>
                 </Card>
 
                 {/* Gallery Images Section */}
-                <Card className="h-fit">
-                    <CardHeader>
+                <Card className="h-fit border-secondary/20 shadow-sm">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
                         <div className="flex items-center justify-between">
                             <div>
-                                <CardTitle>Gallery Images</CardTitle>
-                                <CardDescription>Images displayed in the top section grid (4 recommended)</CardDescription>
+                                <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Gallery Images</CardTitle>
+                                <CardDescription className="text-xs md:text-sm">Images displayed in the top section grid</CardDescription>
                             </div>
-                            <Button onClick={addImage} variant="outline" size="sm" className="h-7 gap-1">
-                                <Plus className="h-3 w-3" /> Add Image
+                            <Button onClick={addImage} variant="outline" size="sm" className="h-8 md:h-9 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full gap-2">
+                                <Plus className="h-3.5 w-3.5 md:h-4 md:w-4" /> Add Image
                             </Button>
                         </div>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-4 md:p-6 space-y-4">
                         {aboutData.images && aboutData.images.map((img, i) => (
-                            <div key={i} className="flex gap-2 items-start bg-secondary/20 p-3 rounded-lg border">
+                            <div key={i} className="flex gap-3 md:gap-4 items-start bg-secondary/5 p-3 md:p-4 rounded-xl border border-secondary/20">
                                 <div className="flex-1 space-y-2">
-                                    <Label className="text-xs">Image URL {i + 1}</Label>
+                                    <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Image URL {i + 1}</Label>
                                     <Input
                                         value={img}
                                         onChange={(e) => updateImage(i, e.target.value)}
                                         placeholder="/assets/products/image.jpg"
-                                        className="bg-background"
+                                        className="h-9 md:h-10 bg-white border-secondary/20 text-xs md:text-sm"
                                     />
                                     {img && (
-                                        <div className="mt-2 aspect-video rounded overflow-hidden border bg-background flex items-center justify-center">
-                                            <img 
-                                                src={img} 
-                                                alt={`Preview ${i + 1}`} 
-                                                className="max-h-full object-contain"
+                                        <div className="mt-2 aspect-video rounded-lg overflow-hidden border border-secondary/20 bg-white flex items-center justify-center relative">
+                                            <img
+                                                src={img}
+                                                alt={`Preview ${i + 1}`}
+                                                className="w-full h-full object-contain"
                                                 onError={(e) => e.target.src = 'https://placehold.co/400x300?text=Invalid+URL'}
                                             />
                                         </div>
@@ -210,16 +211,16 @@ export function AboutContent() {
                                 </div>
                                 <Button
                                     variant="ghost"
-                                    size="sm"
+                                    size="icon"
                                     onClick={() => removeImage(i)}
-                                    className="text-destructive mt-6"
+                                    className="text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 h-8 w-8 mt-6 rounded-full"
                                 >
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>
                         ))}
                         {(!aboutData.images || aboutData.images.length === 0) && (
-                            <div className="text-center py-8 border-2 border-dashed rounded-lg text-muted-foreground">
+                            <div className="text-center py-6 md:py-8 border-2 border-dashed border-secondary/20 rounded-xl text-muted-foreground text-xs md:text-sm italic">
                                 No images added. Click 'Add Image' to begin.
                             </div>
                         )}
@@ -227,54 +228,55 @@ export function AboutContent() {
                 </Card>
 
                 {/* Company Story / Content Section */}
-                <Card className="h-fit">
-                    <CardHeader>
-                        <CardTitle>Company Story</CardTitle>
-                        <CardDescription>Detailed history and philosophy sections</CardDescription>
+                <Card className="h-fit border-secondary/20 shadow-sm">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                        <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Company Story</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">Detailed history and philosophy sections</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
                         <div className="space-y-2">
-                            <Label>Content Heading</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Content Heading</Label>
                             <Input
                                 value={aboutData.content.heading}
                                 onChange={(e) => updateContent('heading', e.target.value)}
                                 placeholder="ENGINEERED FOR THRILLS"
-                                className="font-bold"
+                                className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold"
                             />
                         </div>
 
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <Label>Story Paragraphs</Label>
-                                <Button onClick={addParagraph} variant="outline" size="sm" className="h-7 gap-1">
-                                    <Plus className="h-3 w-3" /> Add
+                                <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Story Paragraphs</Label>
+                                <Button onClick={addParagraph} variant="outline" size="sm" className="h-8 md:h-9 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full gap-2">
+                                    <Plus className="h-3.5 w-3.5 md:h-4 md:w-4" /> Add
                                 </Button>
                             </div>
                             {aboutData.content.paragraphs.map((p, i) => (
-                                <div key={i} className="flex gap-2">
+                                <div key={i} className="flex gap-3">
                                     <Textarea
                                         value={p}
                                         onChange={(e) => updateParagraph(i, e.target.value)}
                                         rows={3}
+                                        className="bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                                     />
                                     <Button
                                         variant="ghost"
-                                        size="sm"
+                                        size="icon"
                                         onClick={() => removeParagraph(i)}
-                                        className="text-destructive h-fit"
+                                        className="text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 h-8 w-8 rounded-full flex-shrink-0"
                                     >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
                                     </Button>
                                 </div>
                             ))}
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Visual Emoji</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Visual Emoji</Label>
                             <Input
                                 value={aboutData.content.emoji}
                                 onChange={(e) => updateContent('emoji', e.target.value)}
-                                className="text-3xl w-20 h-20 text-center"
+                                className="text-2xl md:text-3xl w-16 h-16 md:w-20 md:h-20 text-center rounded-2xl bg-secondary/5 border-secondary/20"
                             />
                         </div>
                     </CardContent>
@@ -282,55 +284,55 @@ export function AboutContent() {
             </div>
 
             {/* Values Section */}
-            <Card>
-                <CardHeader>
+            <Card className="border-secondary/20 shadow-sm">
+                <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
                     <div className="flex items-center justify-between">
                         <div>
-                            <CardTitle>Core Values</CardTitle>
-                            <CardDescription>Grid of 4 values with icons</CardDescription>
+                            <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Core Values</CardTitle>
+                            <CardDescription className="text-xs md:text-sm">Grid of 4 values with icons</CardDescription>
                         </div>
-                        <Button onClick={addValue} size="sm" className="gap-2">
-                            <Plus className="h-4 w-4" />
+                        <Button onClick={addValue} size="sm" className="h-8 md:h-9 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full gap-2">
+                            <Plus className="h-3.5 w-3.5 md:h-4 md:w-4" />
                             Add Value
                         </Button>
                     </div>
                 </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <CardContent className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {aboutData.values.map((v, i) => (
-                        <div key={v.id} className="p-4 rounded-xl border bg-secondary/10 space-y-4 relative group">
+                        <div key={v.id} className="p-4 rounded-2xl border border-secondary/20 bg-secondary/5 space-y-3 relative group hover:shadow-lg transition-all duration-300">
                             <Button
                                 variant="ghost"
-                                size="sm"
+                                size="icon"
                                 onClick={() => removeValue(i)}
-                                className="absolute top-2 right-2 text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="absolute top-2 right-2 h-7 w-7 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity rounded-full z-10"
                             >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="h-3.5 w-3.5" />
                             </Button>
-                            <div className="space-y-2">
-                                <Label className="text-[10px] uppercase font-bold">Lucide Icon</Label>
+                            <div className="space-y-1.5">
+                                <Label className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Lucide Icon</Label>
                                 <Input
                                     value={v.icon}
                                     onChange={(e) => updateValue(i, 'icon', e.target.value)}
                                     placeholder="Zap"
-                                    className="h-8"
+                                    className="h-8 text-xs bg-white border-secondary/20"
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label className="text-[10px] uppercase font-bold">Title</Label>
+                            <div className="space-y-1.5">
+                                <Label className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Title</Label>
                                 <Input
                                     value={v.title}
                                     onChange={(e) => updateValue(i, 'title', e.target.value)}
                                     placeholder="INNOVATION"
-                                    className="font-bold h-8"
+                                    className="h-8 font-bold text-xs bg-white border-secondary/20"
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label className="text-[10px] uppercase font-bold">Description</Label>
+                            <div className="space-y-1.5">
+                                <Label className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Description</Label>
                                 <Textarea
                                     value={v.description}
                                     onChange={(e) => updateValue(i, 'description', e.target.value)}
                                     placeholder="Add description..."
-                                    className="text-xs h-20"
+                                    className="text-xs h-20 bg-white border-secondary/20 resize-none"
                                 />
                             </div>
                         </div>

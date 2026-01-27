@@ -185,44 +185,44 @@ export default function ProductForm() {
     };
 
     return (
-        <div className="p-8 max-w-4xl mx-auto space-y-8">
-            <div className="flex items-center gap-4">
+        <div className="p-4 sm:p-6 md:p-8 max-w-4xl mx-auto space-y-6 md:space-y-8">
+            <div className="flex items-center gap-3 md:gap-4">
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-full"
+                    className="rounded-full h-8 w-8 md:h-10 md:w-10"
                     onClick={() => navigate('/admin/products')}
                 >
-                    <ArrowLeft className="h-5 w-5" />
+                    <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
                 </Button>
                 <div>
-                    <h1 className="text-4xl font-black italic tracking-tighter uppercase">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-black italic tracking-tighter uppercase">
                         {isEdit ? 'Edit Toy' : 'Add New Toy'}
                     </h1>
-                    <p className="text-muted-foreground font-medium italic">
+                    <p className="text-xs md:text-sm text-muted-foreground font-medium italic">
                         {isEdit ? `Refining ${formData.name}` : 'A new addition to the toy kingdom'}
                     </p>
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 pb-20">
                 {/* Main Info */}
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-secondary/10 p-8 rounded-[2.5rem] border border-secondary/20 space-y-6">
+                <div className="lg:col-span-2 space-y-4 md:space-y-6">
+                    <div className="bg-secondary/10 p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border border-secondary/20 space-y-4 md:space-y-6">
                         <div className="space-y-2">
-                            <Label className="text-xs font-black uppercase tracking-[0.2em] ml-2">Toy Name</Label>
+                            <Label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] ml-2">Toy Name</Label>
                             <Input
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
                                 placeholder="E.G. TURBO THRILL HOVERBOARD"
-                                className="h-14 rounded-2xl border-secondary/20 bg-background font-bold tracking-tight px-6"
+                                className="h-10 md:h-14 rounded-xl md:rounded-2xl border-secondary/20 bg-background font-bold tracking-tight px-4 md:px-6 text-xs md:text-base"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-black uppercase tracking-[0.2em] ml-2">Description</Label>
+                            <Label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] ml-2">Description</Label>
                             <textarea
                                 name="description"
                                 value={formData.description}
@@ -230,18 +230,18 @@ export default function ProductForm() {
                                 required
                                 rows={6}
                                 placeholder="Tell us why this toy is awesome..."
-                                className="w-full bg-background border border-secondary/20 rounded-2xl p-6 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium italic text-sm"
+                                className="w-full bg-background border border-secondary/20 rounded-xl md:rounded-2xl p-4 md:p-6 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium italic text-xs md:text-sm"
                             />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                             <div className="space-y-2">
-                                <Label className="text-xs font-black uppercase tracking-[0.2em] ml-2">Category</Label>
+                                <Label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] ml-2">Category</Label>
                                 <Select
                                     value={formData.category}
                                     onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
                                 >
-                                    <SelectTrigger className="w-full h-14 bg-background border border-secondary/20 rounded-2xl px-6 font-bold uppercase tracking-widest text-xs ring-offset-background placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20 transition-all">
+                                    <SelectTrigger className="w-full h-10 md:h-14 bg-background border border-secondary/20 rounded-xl md:rounded-2xl px-4 md:px-6 font-bold uppercase tracking-widest text-[10px] md:text-xs ring-offset-background placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20 transition-all">
                                         <SelectValue placeholder="Select Category" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -258,12 +258,12 @@ export default function ProductForm() {
                                 </Select>
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-xs font-black uppercase tracking-[0.2em] ml-2">Status</Label>
+                                <Label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] ml-2">Status</Label>
                                 <Select
                                     value={formData.status}
                                     onValueChange={(val) => setFormData(prev => ({ ...prev, status: val }))}
                                 >
-                                    <SelectTrigger className="w-full h-14 bg-background border border-secondary/20 rounded-2xl px-6 font-bold uppercase tracking-widest text-xs ring-offset-background placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20 transition-all">
+                                    <SelectTrigger className="w-full h-10 md:h-14 bg-background border border-secondary/20 rounded-xl md:rounded-2xl px-4 md:px-6 font-bold uppercase tracking-widest text-[10px] md:text-xs ring-offset-background placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20 transition-all">
                                         <SelectValue placeholder="Select Status" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -276,43 +276,43 @@ export default function ProductForm() {
                     </div>
 
                     {/* Specifications */}
-                    <div className="bg-secondary/10 p-8 rounded-[2.5rem] border border-secondary/20 space-y-6">
+                    <div className="bg-secondary/10 p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border border-secondary/20 space-y-4 md:space-y-6">
                         <div className="flex justify-between items-center ml-2">
-                            <Label className="text-xs font-black uppercase tracking-[0.2em]">Toy Specifications</Label>
+                            <Label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Toy Specifications</Label>
                             <Button
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                className="rounded-full text-primary font-bold uppercase tracking-widest text-[10px]"
+                                className="rounded-full text-primary font-bold uppercase tracking-widest text-[9px] md:text-[10px]"
                                 onClick={addSpec}
                             >
                                 <Plus className="h-3 w-3 mr-1" /> Add Spec
                             </Button>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-3 md:space-y-4">
                             {formData.specs.map((spec, index) => (
-                                <div key={index} className="flex gap-4 items-center animate-in fade-in slide-in-from-left-2 duration-300">
+                                <div key={index} className="flex gap-2 md:gap-4 items-center animate-in fade-in slide-in-from-left-2 duration-300">
                                     <Input
                                         placeholder="Key (e.g. Weight)"
                                         value={spec.key}
                                         onChange={(e) => handleSpecChange(index, 'key', e.target.value)}
-                                        className="rounded-xl h-12 bg-background/50 border-secondary/10"
+                                        className="rounded-lg md:rounded-xl h-10 md:h-12 bg-background/50 border-secondary/10 text-xs md:text-sm"
                                     />
                                     <Input
                                         placeholder="Value (e.g. 5kg)"
                                         value={spec.value}
                                         onChange={(e) => handleSpecChange(index, 'value', e.target.value)}
-                                        className="rounded-xl h-12 bg-background/50 border-secondary/10"
+                                        className="rounded-lg md:rounded-xl h-10 md:h-12 bg-background/50 border-secondary/10 text-xs md:text-sm"
                                     />
                                     <Button
                                         type="button"
                                         variant="ghost"
                                         size="icon"
-                                        className="text-red-500 rounded-full"
+                                        className="text-red-500 rounded-full h-8 w-8 md:h-10 md:w-10 flex-shrink-0"
                                         onClick={() => removeSpec(index)}
                                     >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
                                     </Button>
                                 </div>
                             ))}
@@ -321,11 +321,11 @@ export default function ProductForm() {
                 </div>
 
                 {/* Sidebar Info */}
-                <div className="space-y-8">
+                <div className="space-y-6 md:space-y-8">
                     {/* Media */}
-                    <div className="bg-secondary/10 p-8 rounded-[2.5rem] border border-secondary/20 space-y-6">
-                        <Label className="text-xs font-black uppercase tracking-[0.2em] ml-2">Toy Visuals</Label>
-                        <div className="aspect-square bg-background border-2 border-dashed border-secondary/30 rounded-3xl overflow-hidden relative group">
+                    <div className="bg-secondary/10 p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border border-secondary/20 space-y-4 md:space-y-6">
+                        <Label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] ml-2">Toy Visuals</Label>
+                        <div className="aspect-square bg-background border-2 border-dashed border-secondary/30 rounded-2xl md:rounded-3xl overflow-hidden relative group">
                             {previewUrl ? (
                                 <>
                                     <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
@@ -333,21 +333,21 @@ export default function ProductForm() {
                                         <Button
                                             type="button"
                                             variant="ghost"
-                                            className="text-white hover:text-red-500 font-bold uppercase tracking-widest text-[10px]"
+                                            className="text-white hover:text-red-500 font-bold uppercase tracking-widest text-[9px] md:text-[10px]"
                                             onClick={() => { setSelectedFile(null); setPreviewUrl(''); }}
                                         >
-                                            <Trash2 className="h-4 w-4 mr-2" /> Clear
+                                            <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4 mr-2" /> Clear
                                         </Button>
                                     </div>
                                 </>
                             ) : (
-                                <div className="h-full w-full flex flex-col items-center justify-center p-8 text-center gap-4 cursor-pointer" onClick={() => document.getElementById('file-upload').click()}>
-                                    <div className="h-16 w-16 bg-secondary/20 rounded-full flex items-center justify-center text-muted-foreground">
-                                        <ImageIcon className="h-8 w-8" />
+                                <div className="h-full w-full flex flex-col items-center justify-center p-4 md:p-8 text-center gap-2 md:gap-4 cursor-pointer" onClick={() => document.getElementById('file-upload').click()}>
+                                    <div className="h-12 w-12 md:h-16 md:w-16 bg-secondary/20 rounded-full flex items-center justify-center text-muted-foreground">
+                                        <ImageIcon className="h-6 w-6 md:h-8 md:w-8" />
                                     </div>
-                                    <div className="space-y-1">
-                                        <p className="text-xs font-bold uppercase tracking-wider">Upload Image</p>
-                                        <p className="text-[10px] text-muted-foreground italic">Click to browse files</p>
+                                    <div className="space-y-0.5 md:space-y-1">
+                                        <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Upload Image</p>
+                                        <p className="text-[8px] md:text-[10px] text-muted-foreground italic">Click to browse files</p>
                                     </div>
                                 </div>
                             )}
@@ -362,12 +362,12 @@ export default function ProductForm() {
                     </div>
 
                     {/* Inventory & Pricing */}
-                    <div className="bg-secondary/10 p-8 rounded-[2.5rem] border border-secondary/20 space-y-6">
-                        <Label className="text-xs font-black uppercase tracking-[0.2em] ml-2">Pricing & Stock</Label>
+                    <div className="bg-secondary/10 p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border border-secondary/20 space-y-4 md:space-y-6">
+                        <Label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] ml-2">Pricing & Stock</Label>
 
-                        <div className="space-y-4">
+                        <div className="space-y-3 md:space-y-4">
                             <div className="space-y-2">
-                                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground ml-2">Base Price (INR)</Label>
+                                <Label className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground ml-2">Base Price (INR)</Label>
                                 <Input
                                     name="price"
                                     type="number"
@@ -375,22 +375,22 @@ export default function ProductForm() {
                                     onChange={handleChange}
                                     required
                                     placeholder="2499"
-                                    className="h-12 rounded-xl border-secondary/20 bg-background font-black italic tracking-tighter"
+                                    className="h-10 md:h-12 rounded-xl border-secondary/20 bg-background font-black italic tracking-tighter text-xs md:text-sm"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground ml-2">Original Price (INR)</Label>
+                                <Label className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground ml-2">Original Price (INR)</Label>
                                 <Input
                                     name="originalPrice"
                                     type="number"
                                     value={formData.originalPrice}
                                     onChange={handleChange}
                                     placeholder="2999"
-                                    className="h-12 rounded-xl border-secondary/20 bg-background/50 font-black italic tracking-tighter"
+                                    className="h-10 md:h-12 rounded-xl border-secondary/20 bg-background/50 font-black italic tracking-tighter text-xs md:text-sm"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground ml-2">Stock Quantity</Label>
+                                <Label className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground ml-2">Stock Quantity</Label>
                                 <Input
                                     name="stock"
                                     type="number"
@@ -398,28 +398,28 @@ export default function ProductForm() {
                                     onChange={handleChange}
                                     required
                                     placeholder="50"
-                                    className="h-12 rounded-xl border-secondary/20 bg-background font-black italic tracking-tighter"
+                                    className="h-10 md:h-12 rounded-xl border-secondary/20 bg-background font-black italic tracking-tighter text-xs md:text-sm"
                                 />
                             </div>
                         </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="sticky bottom-8 z-20 flex gap-4">
+                    <div className="sticky bottom-8 z-20 flex gap-3 md:gap-4">
                         <Button
                             type="submit"
-                            className="flex-1 h-14 rounded-full font-black italic tracking-widest uppercase shadow-xl shadow-primary/20"
+                            className="flex-1 h-12 md:h-14 rounded-full font-black italic tracking-widest uppercase shadow-xl shadow-primary/20 text-xs md:text-sm"
                         >
-                            <Save className="mr-2 h-5 w-5" />
+                            <Save className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                             {isEdit ? 'Update Toy' : 'Save Toy'}
                         </Button>
                         <Button
                             type="button"
                             variant="outline"
-                            className="h-14 rounded-full font-black italic tracking-widest uppercase px-8 border-secondary/20"
+                            className="h-12 md:h-14 rounded-full font-black italic tracking-widest uppercase px-6 md:px-8 border-secondary/20 text-xs md:text-sm"
                             onClick={() => navigate('/admin/products')}
                         >
-                            <X className="h-5 w-5" />
+                            <X className="h-4 w-4 md:h-5 md:w-5" />
                         </Button>
                     </div>
                 </div>

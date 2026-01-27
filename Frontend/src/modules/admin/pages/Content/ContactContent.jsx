@@ -82,62 +82,63 @@ export function ContactContent() {
     };
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-8">
-            <div className="flex items-center justify-between">
+        <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 pb-20">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tighter uppercase">Contact Page Content</h1>
-                    <p className="text-muted-foreground mt-2">Manage contact info, support hours, and form labels</p>
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter uppercase">Contact Page Content</h1>
+                    <p className="text-xs md:text-sm text-muted-foreground mt-1 font-medium italic">Manage contact info, support hours, and form labels</p>
                 </div>
-                <div className="flex gap-3">
-                    <Button variant="outline" onClick={handleReset} className="gap-2" disabled={loading}>
-                        <RotateCcw className="h-4 w-4" />
+                <div className="flex gap-2 w-full md:w-auto">
+                    <Button variant="outline" onClick={handleReset} className="flex-1 md:flex-none gap-2 text-xs md:text-sm h-10 md:h-11">
+                        <RotateCcw className="h-3.5 w-3.5 md:h-4 md:w-4" />
                         Discard
                     </Button>
-                    <Button onClick={handleSave} className="gap-2" disabled={loading}>
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    <Button onClick={handleSave} className="flex-1 md:flex-none gap-2 text-xs md:text-sm h-10 md:h-11 font-bold tracking-wide" disabled={loading}>
+                        {loading ? <Loader2 className="h-3.5 w-3.5 md:h-4 md:w-4 animate-spin" /> : <Save className="h-3.5 w-3.5 md:h-4 md:w-4" />}
                         {loading ? 'Saving...' : 'Save Changes'}
                     </Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                 {/* Header Section */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Page Header</CardTitle>
-                        <CardDescription>Main title and introductory text</CardDescription>
+                <Card className="border-secondary/20 shadow-sm">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                        <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Page Header</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">Main title and introductory text</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-4 md:p-6 space-y-4">
                         <div className="space-y-2">
-                            <Label>Header Title</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Header Title</Label>
                             <Input
                                 value={contactData.header.title}
                                 onChange={(e) => updateHeader('title', e.target.value)}
-                                className="font-bold"
+                                className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Header Subtitle</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Header Subtitle</Label>
                             <Textarea
                                 value={contactData.header.subtitle}
                                 onChange={(e) => updateHeader('subtitle', e.target.value)}
                                 rows={3}
+                                className="bg-secondary/5 border-secondary/20 text-xs md:text-sm min-h-[80px]"
                             />
                         </div>
                     </CardContent>
                 </Card>
 
                 {/* Support Hours Card */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Support Status</CardTitle>
-                        <CardDescription>Live status and working hours</CardDescription>
+                <Card className="border-secondary/20 shadow-sm">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                        <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Support Status</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">Live status and working hours</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="flex items-center justify-between p-4 bg-secondary/10 rounded-xl border">
-                            <div className="space-y-1">
-                                <Label className="text-sm font-bold">Live Support Active</Label>
-                                <p className="text-xs text-muted-foreground">Toggles the pulse indicator on contact page</p>
+                    <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
+                        <div className="flex items-center justify-between p-3 md:p-4 bg-secondary/5 rounded-xl border border-secondary/20">
+                            <div className="space-y-0.5">
+                                <Label className="text-xs md:text-sm font-bold">Live Support Active</Label>
+                                <p className="text-[10px] md:text-xs text-muted-foreground">Toggles the pulse indicator on contact page</p>
                             </div>
                             <Switch
                                 checked={contactData.supportHours.liveStatus}
@@ -146,111 +147,123 @@ export function ContactContent() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Status Text</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Status Text</Label>
                             <Input
                                 value={contactData.supportHours.liveText}
                                 onChange={(e) => updateHours('liveText', e.target.value)}
+                                className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Working Hours Schedule</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Working Hours Schedule</Label>
                             <Textarea
                                 value={contactData.supportHours.schedule}
                                 onChange={(e) => updateHours('schedule', e.target.value)}
                                 rows={3}
                                 placeholder="Monday — Friday: 9am — 6pm..."
+                                className="bg-secondary/5 border-secondary/20 text-xs md:text-sm min-h-[80px]"
                             />
                         </div>
                     </CardContent>
                 </Card>
 
                 {/* Contact Information */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Contact Information</CardTitle>
-                        <CardDescription>Direct contact channels</CardDescription>
+                <Card className="border-secondary/20 shadow-sm">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                        <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Contact Information</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">Direct contact channels</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-4 md:p-6 space-y-4">
                         <div className="space-y-2">
-                            <Label>Support Email</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Support Email</Label>
                             <Input
                                 value={contactData.contactInfo.email}
                                 onChange={(e) => updateInfo('email', e.target.value)}
+                                className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Support Phone</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Support Phone</Label>
                             <Input
                                 value={contactData.contactInfo.phone}
                                 onChange={(e) => updateInfo('phone', e.target.value)}
+                                className="h-10 md:h-12 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Studio Address</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Studio Address</Label>
                             <Textarea
                                 value={contactData.contactInfo.address}
                                 onChange={(e) => updateInfo('address', e.target.value)}
                                 rows={3}
+                                className="bg-secondary/5 border-secondary/20 text-xs md:text-sm min-h-[80px]"
                             />
                         </div>
                     </CardContent>
                 </Card>
 
                 {/* Form Labels */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Form Configuration</CardTitle>
-                        <CardDescription>Customize labels and placeholders</CardDescription>
+                <Card className="border-secondary/20 shadow-sm">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4">
+                        <CardTitle className="text-lg md:text-xl font-bold uppercase tracking-tight">Form Configuration</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">Customize labels and placeholders</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <CardContent className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label>Name Field Label</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Name Field Label</Label>
                             <Input
                                 value={contactData.formLabels.nameLabel}
                                 onChange={(e) => updateLabels('nameLabel', e.target.value)}
+                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Name Placeholder</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Name Placeholder</Label>
                             <Input
                                 value={contactData.formLabels.namePlaceholder}
                                 onChange={(e) => updateLabels('namePlaceholder', e.target.value)}
+                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Email Field Label</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Email Field Label</Label>
                             <Input
                                 value={contactData.formLabels.emailLabel}
                                 onChange={(e) => updateLabels('emailLabel', e.target.value)}
+                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Email Placeholder</Label>
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Email Placeholder</Label>
                             <Input
                                 value={contactData.formLabels.emailPlaceholder}
                                 onChange={(e) => updateLabels('emailPlaceholder', e.target.value)}
+                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
-                        <div className="space-y-2 col-span-2">
-                            <Label>Message Label</Label>
+                        <div className="space-y-2 col-span-1 md:col-span-2">
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Message Label</Label>
                             <Input
                                 value={contactData.formLabels.messageLabel}
                                 onChange={(e) => updateLabels('messageLabel', e.target.value)}
+                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
-                        <div className="space-y-2 col-span-2">
-                            <Label>Message Placeholder</Label>
+                        <div className="space-y-2 col-span-1 md:col-span-2">
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Message Placeholder</Label>
                             <Input
                                 value={contactData.formLabels.messagePlaceholder}
                                 onChange={(e) => updateLabels('messagePlaceholder', e.target.value)}
+                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm"
                             />
                         </div>
-                        <div className="space-y-2 col-span-2">
-                            <Label>Submit Button Text</Label>
+                        <div className="space-y-2 col-span-1 md:col-span-2">
+                            <Label className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Submit Button Text</Label>
                             <Input
                                 value={contactData.formLabels.submitText}
                                 onChange={(e) => updateLabels('submitText', e.target.value)}
+                                className="h-9 md:h-10 bg-secondary/5 border-secondary/20 text-xs md:text-sm font-bold"
                             />
                         </div>
                     </CardContent>

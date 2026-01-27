@@ -21,7 +21,7 @@ export default function AdminLayout() {
 
             <div className="lg:ml-72 flex flex-col min-h-screen">
                 {/* Header */}
-                <header className="h-20 border-b border-secondary/20 flex items-center justify-between px-8 bg-background/80 backdrop-blur-md sticky top-0 z-30">
+                <header className="h-16 md:h-20 border-b border-secondary/20 flex items-center justify-between px-4 md:px-8 bg-background/80 backdrop-blur-md sticky top-0 z-30">
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setIsSidebarOpen(true)}
@@ -41,9 +41,9 @@ export default function AdminLayout() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             className="rounded-full relative"
                             onClick={() => navigate('/admin/notifications')}
                         >
