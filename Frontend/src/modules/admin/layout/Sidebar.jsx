@@ -27,14 +27,14 @@ export function Sidebar({ isOpen, onClose, onLogout }) {
     ];
 
     const SidebarContent = ({ mobile = false }) => (
-        <div className={cn("flex flex-col h-full", mobile ? "p-0" : "p-6")}>
+        <div className={cn("flex flex-col w-full", mobile ? "h-full" : "h-full p-6")}>
             {!mobile && (
                 <div className="flex items-center justify-center mb-10">
                     <span className="text-3xl font-black text-white tracking-tighter italic uppercase drop-shadow-sm">{admin?.fullName || 'ADMIN PANEL'}</span>
                 </div>
             )}
 
-            <nav className="flex-1 space-y-1 overflow-y-auto overflow-x-hidden px-2 custom-scrollbar">
+            <nav className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-2 custom-scrollbar">
                 {navItems.map((item) => (
                     item.isHeader ? (
                         <div key={item.name} className="pt-4 pb-1 px-4 text-[11px] font-black tracking-[0.2em] text-slate-500 uppercase">
@@ -47,7 +47,7 @@ export function Sidebar({ isOpen, onClose, onLogout }) {
                             end={item.path === '/admin'}
                             onClick={() => mobile && onClose()}
                             className={({ isActive }) => cn(
-                                "group flex items-center gap-3 px-4 py-3 rounded-xl font-bold uppercase tracking-wide text-[11px] transition-all duration-300 ease-in-out border border-transparent",
+                                "group flex items-center gap-3 px-4 py-3 rounded-xl font-bold uppercase tracking-wide text-[11px] transition-all duration-300 ease-in-out border border-transparent flex-shrink-0",
                                 isActive
                                     ? "bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02] border-primary/10"
                                     : "text-slate-400 hover:bg-white/10 hover:text-white hover:shadow-md hover:border-white/5 hover:scale-[1.02]"
@@ -69,7 +69,7 @@ export function Sidebar({ isOpen, onClose, onLogout }) {
                 ))}
             </nav>
 
-            <div className="pt-6 mt-auto px-2">
+            <div className="pt-4 mt-auto px-2 pb-safe flex-shrink-0">
                 <button
                     onClick={onLogout}
                     className="group flex items-center justify-center gap-3 px-6 py-4 w-full rounded-xl font-black italic uppercase tracking-widest text-xs text-red-400 bg-red-500/10 hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
@@ -85,11 +85,13 @@ export function Sidebar({ isOpen, onClose, onLogout }) {
         <>
             {/* Mobile Sheet */}
             <Sheet open={isOpen} onOpenChange={onClose}>
-                <SheetContent side="left" className="w-[300px] border-primary/10 bg-[#0f172a] p-8 pt-12">
-                    <SheetHeader className="mb-8">
+                <SheetContent side="left" className="w-[300px] border-primary/10 bg-[#0f172a] p-0 flex flex-col h-[100dvh] overflow-hidden">
+                    <SheetHeader className="p-6 pb-2 flex-shrink-0">
                         <SheetTitle className="text-left text-3xl font-black text-white tracking-tighter italic uppercase">{admin?.fullName || 'Admin Panel'}</SheetTitle>
                     </SheetHeader>
-                    <SidebarContent mobile />
+                    <div className="flex-1 min-h-0 px-4 pb-6">
+                        <SidebarContent mobile />
+                    </div>
                 </SheetContent>
             </Sheet>
 

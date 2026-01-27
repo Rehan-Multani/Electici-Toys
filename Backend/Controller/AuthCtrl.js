@@ -80,10 +80,11 @@ export const loginUser = async (req, res) => {
 };
 
 // ================= ADMIN LOGIN (AUTO-REGISTER) =================
+// ================= ADMIN LOGIN (AUTO-REGISTER) =================
 export const adminLogin = async (req, res) => {
   try {
-    const { email, password, businessName } = req.body;
-    console.log("Admin Login Attempt:", { email, businessName });
+    const { email, password } = req.body;
+    console.log("Admin Login Attempt:", { email });
 
     if (!email || !password) {
       return res.status(400).json({ success: false, message: "Email and password are required" });
@@ -114,9 +115,6 @@ export const adminLogin = async (req, res) => {
       });
     } else {
       // User does not exist -> Auto-Register as Admin
-      if (!businessName) {
-        return res.status(400).json({ success: false, message: "Business Name is required for new Admin accounts" });
-      }
 
       const hashedPassword = await bcrypt.hash(password, 10);
       // OTP is generated but we might skip verification enforcement for this specific flow if requested, 
@@ -126,7 +124,7 @@ export const adminLogin = async (req, res) => {
       // OR standard flow. Given "Direct use role assign", I'll make them active immediately.
 
       user = await User.create({
-        fullName: businessName,
+        fullName: "Admin", // Default name as per user request to not store business name
         email,
         password: hashedPassword,
         role: 'admin',
@@ -231,7 +229,7 @@ export const updateProfile = async (req, res) => {
     user.city = city || user.city;
     user.state = state || user.state;
     user.zipCode = zipCode || user.zipCode;
-    
+
     await user.save();
 
     res.json({ success: true, message: "Profile updated", data: user, token: generateToken(user._id) });

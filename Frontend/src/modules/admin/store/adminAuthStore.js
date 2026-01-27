@@ -8,10 +8,10 @@ export const useAdminAuthStore = create(
             admin: null,
             isAuthenticated: false,
 
-            login: async (email, password, businessName) => {
+            login: async (email, password) => {
                 try {
                     // Call the new Merged Admin Login/Register Endpoint
-                    const response = await api.post('/auth/admin-login', { email, password, businessName });
+                    const response = await api.post('/auth/admin-login', { email, password });
                     if (response.data.success) {
                         const user = response.data.data;
                         // Store admin data and token

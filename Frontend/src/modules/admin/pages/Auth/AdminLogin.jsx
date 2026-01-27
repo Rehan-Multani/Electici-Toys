@@ -13,7 +13,6 @@ export default function AdminLogin() {
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
-        businessName: '',
         email: '',
         password: '',
     });
@@ -24,7 +23,7 @@ export default function AdminLogin() {
 
         try {
             // Calling login but it essentially acts as "Enter Hub" (auto-register if new)
-            const result = await login(formData.email, formData.password, formData.businessName);
+            const result = await login(formData.email, formData.password);
 
             if (result.success) {
                 toast({
@@ -75,17 +74,8 @@ export default function AdminLogin() {
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest pl-4">Business Name (For New Accounts)</label>
-                                <Input
-                                    type="text"
-                                    placeholder="Your Store Name"
-                                    value={formData.businessName}
-                                    onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                                    className="h-12 rounded-2xl bg-secondary/10 border-secondary/20 focus:border-primary/50 text-sm font-bold"
-                                />
-                                <p className="text-[10px] text-muted-foreground pl-4">* Leave empty if already registered</p>
-                            </div>
+
+
 
                             <div className="space-y-2">
                                 <label className="text-xs font-black uppercase tracking-widest pl-4">Business Email</label>
