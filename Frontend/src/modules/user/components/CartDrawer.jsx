@@ -12,7 +12,7 @@ export function CartDrawer() {
     const { items, removeItem, updateQuantity, getTotalPrice, getItemCount } = useCartStore();
     const [shippingThreshold, setShippingThreshold] = useState(50000);
     const [isGlobalFreeShipping, setIsGlobalFreeShipping] = useState(false);
-    
+
     const totalPrice = getTotalPrice();
 
     useEffect(() => {
@@ -21,12 +21,12 @@ export function CartDrawer() {
                 const res = await api.get('/shipping/checkout-info');
                 if (res.data.success) {
                     setIsGlobalFreeShipping(res.data.freeShippingEnabled);
-                    
+
                     // Find the lowest minAmount that offers free shipping (charge = 0)
                     const freeSlab = res.data.slabs
                         ?.filter(s => s.shippingCharge === 0)
                         ?.sort((a, b) => a.minAmount - b.minAmount)[0];
-                    
+
                     if (freeSlab) {
                         setShippingThreshold(freeSlab.minAmount);
                     }
@@ -100,8 +100,8 @@ export function CartDrawer() {
                                 <div className="w-24 h-24 glass rounded-full flex items-center justify-center text-4xl shadow-2xl">🛒</div>
                                 <div className="space-y-2">
                                     <p className="text-foreground/50 font-black uppercase tracking-[0.2em] text-[10px]">Your bag is currently empty</p>
-                                    <Button 
-                                        variant="outline" 
+                                    <Button
+                                        variant="outline"
                                         className="rounded-full h-12 px-8 font-black italic tracking-tighter"
                                         onClick={() => setIsOpen(false)}
                                     >
@@ -113,7 +113,7 @@ export function CartDrawer() {
                             <div className="space-y-6">
                                 {items.map((item) => (
                                     <motion.div
-                                        key={item.id}
+                                        key={`${item.id}-${item.color || 'none'}`}
                                         layout
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
@@ -125,12 +125,15 @@ export function CartDrawer() {
                                         </div>
                                         <div className="flex-1 space-y-2 py-1">
                                             <div className="flex justify-between items-start">
-                                                <h4 className="font-black italic uppercase tracking-tighter text-sm leading-none opacity-90 group-hover:text-primary transition-colors">{item.name}</h4>
+                                                <div>
+                                                    <h4 className="font-black italic uppercase tracking-tighter text-sm leading-none opacity-90 group-hover:text-primary transition-colors">{item.name}</h4>
+                                                    {item.color && <p className="text-[10px] font-black uppercase text-primary mt-1">Color: {item.color}</p>}
+                                                </div>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
                                                     className="h-7 w-7 rounded-full hover:bg-destructive hover:text-white transition-all"
-                                                    onClick={() => removeItem(item.id)}
+                                                    onClick={() => removeItem(item.id, item.color)}
                                                 >
                                                     <X className="h-3.5 w-3.5" />
                                                 </Button>
@@ -138,9 +141,9 @@ export function CartDrawer() {
                                             <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest opacity-50 line-clamp-1">{item.category}</p>
                                             <div className="flex justify-between items-center pt-3">
                                                 <div className="flex items-center glass rounded-full px-3 py-1.5 gap-4">
-                                                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="hover:text-primary transition-colors"><Minus className="h-3 w-3" /></button>
+                                                    <button onClick={() => updateQuantity(item.id, item.color, item.quantity - 1)} className="hover:text-primary transition-colors"><Minus className="h-3 w-3" /></button>
                                                     <span className="text-xs font-black min-w-[12px] text-center">{item.quantity}</span>
-                                                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="hover:text-primary transition-colors"><Plus className="h-3 w-3" /></button>
+                                                    <button onClick={() => updateQuantity(item.id, item.color, item.quantity + 1)} className="hover:text-primary transition-colors"><Plus className="h-3 w-3" /></button>
                                                 </div>
                                                 <span className="font-black italic text-lg tracking-tighter">₹{(item.price * item.quantity).toLocaleString()}</span>
                                             </div>
@@ -160,17 +163,17 @@ export function CartDrawer() {
                         </div>
                         <p className="text-[9px] text-muted-foreground text-center uppercase tracking-[0.2em] font-black opacity-40">Shipping and taxes calculated at checkout</p>
                         <div className="flex gap-4 pb-4">
-                            <Button 
-                                asChild 
-                                variant="outline" 
+                            <Button
+                                asChild
+                                variant="outline"
                                 className="flex-1 h-16 rounded-full text-sm font-black italic tracking-tighter border-border/10 hover:bg-foreground hover:text-background"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <Link to="/cart">VIEW BAG</Link>
                             </Button>
-                            <Button 
-                                premium 
-                                className="flex-[2] h-16 rounded-full text-lg font-black italic tracking-tighter shadow-glow" 
+                            <Button
+                                premium
+                                className="flex-[2] h-16 rounded-full text-lg font-black italic tracking-tighter shadow-glow"
                                 asChild
                                 onClick={() => setIsOpen(false)}
                             >

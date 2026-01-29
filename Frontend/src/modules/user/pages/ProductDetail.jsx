@@ -57,7 +57,6 @@ export function ProductDetail() {
                         variants: p.variants || [],
                         stock: p.quantity,
                         isNew: p.createdAt && (new Date() - new Date(p.createdAt) < 7 * 24 * 60 * 60 * 1000),
-                        id: p._id,
                         ...p
                     };
 

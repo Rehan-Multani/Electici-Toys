@@ -48,8 +48,8 @@ export function Cart() {
     const shippingCharge = calculateShippingCharge();
     const grandTotal = totalPrice + shippingCharge;
 
-    const handleRemove = (id, name) => {
-        removeItem(id);
+    const handleRemove = (id, color, name) => {
+        removeItem(id, color);
         toast({
             title: "Removed from Cart",
             description: `${name} has been removed.`,
@@ -80,7 +80,7 @@ export function Cart() {
                             <AnimatePresence mode="popLayout">
                                 {items.map((item) => (
                                     <motion.div
-                                        key={item.id}
+                                        key={`${item.id}-${item.color || 'none'}`}
                                         layout
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -94,20 +94,21 @@ export function Cart() {
                                             <div className="flex justify-between items-start">
                                                 <div>
                                                     <Link to={`/product/${item.id}`} className="text-2xl font-black tracking-tighter uppercase italic hover:text-primary transition-colors">{item.name}</Link>
+                                                    {item.color && <p className="text-xs font-black uppercase text-primary mt-1">Color: {item.color}</p>}
                                                     <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest mt-1">{item.category}</p>
                                                 </div>
-                                                <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRemove(item.id, item.name)}>
+                                                <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRemove(item.id, item.color, item.name)}>
                                                     <Trash2 className="h-5 w-5" />
                                                 </Button>
                                             </div>
 
                                             <div className="flex flex-wrap justify-between items-end gap-6 mt-8">
                                                 <div className="flex items-center bg-secondary/50 rounded-full p-1 border-2 border-transparent focus-within:border-primary transition-all">
-                                                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-background" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                                                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-background" onClick={() => updateQuantity(item.id, item.color, item.quantity - 1)}>
                                                         <Minus className="h-4 w-4" />
                                                     </Button>
                                                     <span className="w-10 text-center font-black italic text-lg">{item.quantity}</span>
-                                                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-background" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                                                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-background" onClick={() => updateQuantity(item.id, item.color, item.quantity + 1)}>
                                                         <Plus className="h-4 w-4" />
                                                     </Button>
                                                 </div>
