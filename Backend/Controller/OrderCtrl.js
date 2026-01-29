@@ -7,11 +7,31 @@ import { getShippingCharges } from "./ShippingCtrl.js";
 import { createNotificationHelper } from "./NotificationCtrl.js";
 import { sendEmail } from "../Helpers/emailHelper.js";
 
+// ================= STOCK HELPER FUNCTIONS =================
+
+// Deduct stock when order is placed
+const deductStock = async (products) => {
+  for (const item of products) {
+    await Product.findByIdAndUpdate(item.productId, {
+      $inc: { quantity: -item.quantity }
+    });
+  }
+};
+
+// Restore stock when cancel/return is approved
+const restoreStock = async (products) => {
+  for (const item of products) {
+    await Product.findByIdAndUpdate(item.productId, {
+      $inc: { quantity: item.quantity }
+    });
+  }
+};
 
 /* ================= PLACE ORDER ================= */
 export const placeOrder = async (req, res) => {
   try {
     const { products, shippingAddressId, paymentMethod = "Razorpay" } = req.body;
+    console.log("RECEIVED ORDER PAYLOAD:", JSON.stringify(req.body, null, 2));
 
     // Validate input
     if (!shippingAddressId) return res.status(400).json({ success: false, message: "shippingAddressId is required" });
@@ -39,7 +59,9 @@ export const placeOrder = async (req, res) => {
         productId: product._id,
         quantity,
         price,
-        total
+        total,
+        color: p.color,
+        image: p.image
       };
     }));
 
@@ -101,6 +123,9 @@ export const placeOrder = async (req, res) => {
         zip: address.zip
       }
     });
+
+    // Deduct stock immediately after order creation
+    await deductStock(orderProducts);
 
     // Notify Admin
     createNotificationHelper({

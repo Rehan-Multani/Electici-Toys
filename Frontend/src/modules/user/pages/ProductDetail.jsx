@@ -16,7 +16,10 @@ export function ProductDetail() {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
     const [quantity, setQuantity] = useState(1);
+    const [activeImage, setActiveImage] = useState(null);
+    const [selectedVariant, setSelectedVariant] = useState(null); // { color: '', images: [] }
 
     // Store hooks
     const addItem = useCartStore((state) => state.addItem);
@@ -40,20 +43,44 @@ export function ProductDetail() {
                     let image = p.images && p.images.length > 0 ? p.images[0] : null;
                     if (image && image.endsWith(':1')) image = image.replace(/:\d+$/, '');
 
-                    setProduct({
+                    const productData = {
                         id: p._id,
                         name: p.productName,
-                        category: p.categoryId?.categoryName || 'Unknown', // Populate might differ
+                        category: p.categoryId?.categoryName || 'Unknown',
                         price: p.sellingPrice || p.actualPrice,
                         originalPrice: p.actualPrice,
                         rating: p.rating || 0,
                         numReviews: p.numReviews || 0,
                         description: p.description,
                         image: image,
+                        images: p.images || [],
+                        variants: p.variants || [],
                         stock: p.quantity,
-                        isNew: p.createdAt && (new Date() - new Date(p.createdAt) < 7 * 24 * 60 * 60 * 1000), // New if < 7 days
+                        isNew: p.createdAt && (new Date() - new Date(p.createdAt) < 7 * 24 * 60 * 60 * 1000),
+                        id: p._id,
                         ...p
-                    });
+                    };
+
+                    setProduct(productData);
+
+                    // Initialize Variant & Image
+                    if (productData.variants && productData.variants.length > 0) {
+                        const firstVar = productData.variants[0];
+                        setSelectedVariant(firstVar);
+                        if (firstVar.images && firstVar.images.length > 0) {
+                            setActiveImage(firstVar.images[0]);
+                        } else {
+                            // fallback to main images if variant has none (rare)
+                            setActiveImage(productData.images && productData.images.length > 0 ? productData.images[0] : image);
+                        }
+                    } else {
+                        // No variants, standard behavior
+                        if (productData.images && productData.images.length > 0) {
+                            setActiveImage(productData.images[0]);
+                        } else {
+                            setActiveImage(image);
+                        }
+                    }
                 } else {
                     setError("Product not found");
                 }
@@ -71,6 +98,13 @@ export function ProductDetail() {
         }
     }, [id]);
 
+    // Force update image when variant changes
+    useEffect(() => {
+        if (selectedVariant && selectedVariant.images && selectedVariant.images.length > 0) {
+            setActiveImage(selectedVariant.images[0]);
+        }
+    }, [selectedVariant]);
+
     if (loading) return (
         <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
             <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -86,10 +120,26 @@ export function ProductDetail() {
     );
 
     const handleBuyNow = () => {
+        const item = {
+            ...product,
+            color: selectedVariant ? selectedVariant.color : null,
+            image: activeImage || product.image
+        };
         for (let i = 0; i < quantity; i++) {
-            addItem(product);
+            addItem(item);
         }
         navigate('/checkout');
+    };
+
+    const handleAddToCart = () => {
+        const item = {
+            ...product,
+            color: selectedVariant ? selectedVariant.color : null,
+            image: activeImage || product.image
+        };
+        for (let i = 0; i < quantity; i++) {
+            addItem(item);
+        }
     };
 
     return (
@@ -112,9 +162,9 @@ export function ProductDetail() {
                         className="space-y-4 max-w-[500px] mx-auto lg:mx-0 lg:ml-12"
                     >
                         <div className="aspect-square rounded-none border-2 border-primary/10 bg-secondary/20 flex items-center justify-center relative overflow-hidden group">
-                            {product.image ? (
+                            {activeImage ? (
                                 <img
-                                    src={product.image}
+                                    src={activeImage}
                                     alt={product.name}
                                     className="w-full h-full object-cover"
                                     onError={(e) => e.target.style.display = 'none'}
@@ -124,16 +174,34 @@ export function ProductDetail() {
                             )}
                             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
-                        {/* Thumbnails (Static for now as we pick single image) */}
-                        <div className="grid grid-cols-4 gap-3 md:gap-4">
-                            {[product.image, product.image, product.image, product.image].map((img, i) => (
-                                <div key={i} className="aspect-square rounded-none border border-primary/10 bg-secondary/20 flex items-center justify-center text-3xl cursor-pointer hover:bg-secondary/40 transition-colors overflow-hidden">
-                                    {img ? (
-                                        <img src={img} alt="" className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity" onError={(e) => e.target.style.display = 'none'} />
-                                    ) : '🎮'}
-                                </div>
-                            ))}
-                        </div>
+                        {/* Thumbnails */}
+                        {product.images && product.images.length > 0 && (
+                            <div className="grid grid-cols-4 gap-3 md:gap-4">
+                                {product.images.map((img, i) => (
+                                    <div
+                                        key={i}
+                                        className={`aspect-square rounded-none border ${activeImage === img ? 'border-primary' : 'border-primary/10'} bg-secondary/20 flex items-center justify-center text-3xl cursor-pointer hover:bg-secondary/40 transition-colors overflow-hidden`}
+                                        onClick={() => {
+                                            setActiveImage(img);
+                                            // Check if this image belongs to a variant
+                                            if (product.variants && product.variants.length > 0) {
+                                                const relatedVariant = product.variants.find(v =>
+                                                    (v.images && v.images.includes(img)) ||
+                                                    (v.images && v.images[0] === img) // simplified check since variants currently enforce 1 image
+                                                );
+                                                if (relatedVariant) {
+                                                    setSelectedVariant(relatedVariant);
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        {img ? (
+                                            <img src={img} alt="" className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity" onError={(e) => e.target.style.display = 'none'} />
+                                        ) : '🎮'}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </motion.div>
 
                     {/* Product Info */}
@@ -171,6 +239,38 @@ export function ProductDetail() {
                             )}
                         </div>
 
+                        {/* Variant Selector */}
+                        {product.variants && product.variants.length > 0 && (
+                            <div className="mb-8 space-y-3">
+                                <div className="mb-8 space-y-3">
+                                    <span className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">
+                                        Color: <span className="text-foreground">{selectedVariant ? selectedVariant.color : 'Select'}</span>
+                                    </span>
+                                    <div className="flex flex-wrap gap-3">
+                                        {product.variants.map((v, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => {
+                                                    setSelectedVariant(v);
+                                                    if (v.images && v.images.length > 0) setActiveImage(v.images[0]);
+                                                }}
+                                                className={`
+                                                min-w-[4rem] px-4 py-3 rounded-xl border-2 font-black uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2
+                                                ${selectedVariant === v
+                                                        ? 'border-primary bg-primary/10 text-primary shadow-sm'
+                                                        : 'border-secondary/40 bg-transparent hover:border-primary/50 text-muted-foreground hover:text-foreground'
+                                                    }
+                                            `}
+                                            >
+                                                {/* Optional: Show tiny dot of image if available? No, user just asked for Color Name */}
+                                                {v.color}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-8">
                             <div className="flex items-center justify-between bg-primary/5 rounded-none p-1 border-2 border-primary/20 focus-within:border-primary transition-all w-full sm:w-auto">
                                 <Button
@@ -196,9 +296,7 @@ export function ProductDetail() {
                                 <Button
                                     size="lg"
                                     className="flex-1 sm:flex-none h-12 rounded-none font-black italic tracking-tighter text-base bg-primary text-primary-foreground hover:bg-primary/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all group px-8"
-                                    onClick={() => {
-                                        for (let i = 0; i < quantity; i++) addItem(product);
-                                    }}
+                                    onClick={handleAddToCart}
                                 >
                                     ADD TO CART <ShoppingCart className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                                 </Button>

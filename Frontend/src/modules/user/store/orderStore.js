@@ -12,23 +12,21 @@ export const useOrderStore = create(
             fetchOrders: async () => {
                 set({ loading: true, error: null });
                 try {
-                    // Note: We need api import here, but it's a store file.
-                    // It is better to import api at top level.
-                    // Assuming 'api' is passed or imported. We will modify imports below.
-                    const response = await api.get('/order/user'); // Assuming endpoint exists
+                    const response = await api.get('/order/user');
 
                     if (response.data.success) {
                         const mappedOrders = response.data.orders.map(order => ({
-                            id: order._id, // Use DB _id for operations
-                            orderId: order.orderId, // Display ID
+                            id: order._id,
+                            orderId: order.orderId,
                             date: order.createdAt,
                             items: order.products.map(p => ({
                                 id: p.productId?._id,
                                 name: p.productId?.productName || "Unknown Product",
-                                image: p.productId?.images?.[0] ?
+                                image: p.image || (p.productId?.images?.[0] ?
                                     (p.productId.images[0].endsWith(':1') ? p.productId.images[0].slice(0, -2) : p.productId.images[0])
-                                    : '',
+                                    : ''),
                                 price: p.price,
+                                color: p.color,
                                 quantity: p.quantity
                             })),
                             subtotal: order.totalAmount,
@@ -42,7 +40,20 @@ export const useOrderStore = create(
                                 : (order.shippingAddressId ?
                                     `${order.shippingAddressId.addressLine1}, ${order.shippingAddressId.city}` : "Address not available"),
                             customerPhone: order.shippingAddress?.phone || "N/A",
-                            paymentMethod: order.paymentMethod
+                            paymentMethod: order.paymentMethod,
+                            paymentStatus: order.paymentStatus,
+                            // Cancel/Return fields
+                            cancelReason: order.cancelReason,
+                            cancelRequestedAt: order.cancelRequestedAt,
+                            cancelApprovedByAdmin: order.cancelApprovedByAdmin,
+                            cancelAdminResponse: order.cancelAdminResponse,
+                            returnReason: order.returnReason,
+                            returnRequestedAt: order.returnRequestedAt,
+                            returnApprovedByAdmin: order.returnApprovedByAdmin,
+                            returnAdminResponse: order.returnAdminResponse,
+                            refundStatus: order.refundStatus,
+                            refundAmount: order.refundAmount,
+                            deliveredAt: order.statusTimestamps?.delivered
                         }));
                         set({ orders: mappedOrders });
                     }
@@ -54,10 +65,48 @@ export const useOrderStore = create(
                 }
             },
 
-            addOrder: (orderData, cartItems, total) => {
-                // Local optimistic update or just trigger refetch?
-                // Ideally backend handles creation. We might just re-fetch.
-                // Keeping basic impl or removing if not used directly anymore by frontend logic (since checkout handles API calls)
+            requestCancel: async (orderId, cancelReason, refundDetails = null) => {
+                set({ loading: true, error: null });
+                try {
+                    const response = await api.put('/order/request-cancel', {
+                        orderId,
+                        cancelReason,
+                        refundDetails
+                    });
+                    if (response.data.success) {
+                        await get().fetchOrders();
+                        return { success: true, message: response.data.message };
+                    }
+                    return { success: false, message: response.data.message };
+                } catch (error) {
+                    const message = error.response?.data?.message || error.message;
+                    set({ error: message });
+                    return { success: false, message };
+                } finally {
+                    set({ loading: false });
+                }
+            },
+
+            requestReturn: async (orderId, returnReason, refundDetails = null) => {
+                set({ loading: true, error: null });
+                try {
+                    const response = await api.put('/order/request-return', {
+                        orderId,
+                        returnReason,
+                        refundDetails
+                    });
+                    if (response.data.success) {
+                        await get().fetchOrders();
+                        return { success: true, message: response.data.message };
+                    }
+                    return { success: false, message: response.data.message };
+                } catch (error) {
+                    const message = error.response?.data?.message || error.message;
+                    set({ error: message });
+                    return { success: false, message };
+                } finally {
+                    set({ loading: false });
+                }
             },
 
             getOrder: (id) => {
@@ -69,3 +118,4 @@ export const useOrderStore = create(
         }
     )
 );
+

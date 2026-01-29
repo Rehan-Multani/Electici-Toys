@@ -36,16 +36,22 @@ export default function Notifications() {
     useEffect(() => {
         fetchNotifications();
 
-        if (socket && socket.connected) {
-            const handleAdminNotification = (notif) => {
-                setNotifications(prev => [notif, ...prev]);
-            };
-            socket.on("admin-notification", handleAdminNotification);
-
-            return () => {
-                socket.off("admin-notification", handleAdminNotification);
-            };
+        // Connect socket if not already connected (admin panel doesn't auto-connect like user app)
+        if (!socket.connected) {
+            socket.connect();
+            console.log("Admin: Connecting socket...");
         }
+
+        const handleAdminNotification = (notif) => {
+            console.log("Admin received notification:", notif);
+            setNotifications(prev => [notif, ...prev]);
+        };
+
+        socket.on("admin-notification", handleAdminNotification);
+
+        return () => {
+            socket.off("admin-notification", handleAdminNotification);
+        };
     }, []);
 
     const markAllRead = async () => {

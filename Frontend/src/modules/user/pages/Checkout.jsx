@@ -176,7 +176,9 @@ export function Checkout() {
             const orderPayload = {
                 products: items.map(item => ({
                     productId: item.id,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    color: item.color,
+                    image: item.image
                 })),
                 shippingAddressId: shippingAddressId,
                 paymentMethod: formData.paymentMethod === 'cod' ? 'COD' : 'ONLINE'
@@ -308,11 +310,10 @@ export function Checkout() {
                                 <button
                                     type="button"
                                     onClick={handleSavedAddressToggle}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border ${
-                                        useSavedAddress 
-                                        ? 'bg-primary/10 border-primary/50 text-primary' 
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border ${useSavedAddress
+                                        ? 'bg-primary/10 border-primary/50 text-primary'
                                         : 'bg-secondary/5 border-border/50 text-muted-foreground hover:bg-secondary/10'
-                                    }`}
+                                        }`}
                                 >
                                     {useSavedAddress ? (
                                         <>
@@ -495,6 +496,9 @@ export function Checkout() {
                                     <div className="flex-1 min-w-0">
                                         <h4 className="font-bold uppercase text-xs line-clamp-1 text-foreground">{item.name}</h4>
                                         <p className="text-[10px] text-muted-foreground font-medium">Qty: {item.quantity}</p>
+                                        {item.color && (
+                                            <p className="text-[10px] font-black uppercase tracking-wider text-primary">Color: {item.color}</p>
+                                        )}
                                     </div>
                                     <div className="font-bold text-sm text-foreground">
                                         ₹{(item.price * item.quantity).toLocaleString()}

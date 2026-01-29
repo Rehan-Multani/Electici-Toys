@@ -17,11 +17,18 @@ const cartSchema = new mongoose.Schema(
       default: 1,
       min: 1,
     },
+    color: {
+      type: String,
+      default: null
+    },
+    image: {
+      type: String,
+    }
   },
   { timestamps: true }
 );
 
-// ensure a user cannot have duplicate product in cart
-cartSchema.index({ userId: 1, productId: 1 }, { unique: true });
+// ensure a user cannot have duplicate product in cart with same color
+cartSchema.index({ userId: 1, productId: 1, color: 1 }, { unique: true });
 
 export default mongoose.model("Cart", cartSchema);

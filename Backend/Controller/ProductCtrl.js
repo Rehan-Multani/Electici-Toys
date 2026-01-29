@@ -8,7 +8,7 @@ export const createProduct = async (req, res) => {
     const existingProduct = await Product.findOne({
       $or: [
         { productName: req.body.productName },
-        { sku: req.body.sku } // agar SKU bhi use kar rahe ho
+        { sku: req.body.sku }
       ]
     });
 
@@ -19,31 +19,50 @@ export const createProduct = async (req, res) => {
       });
     }
 
-    let imageUrls = [];
-
+    let allImageUrls = [];
     if (req.files && req.files.length > 0) {
       for (let file of req.files) {
         const result = await uploadToCloudinary(file.buffer, "products");
-        imageUrls.push(result.url);
+        allImageUrls.push(result.url);
       }
     }
 
     // Handle specifications
     let specifications = req.body.specifications;
     if (specifications && typeof specifications === 'string') {
+      try { specifications = JSON.parse(specifications); } catch (e) { specifications = []; }
+    }
+
+    // Handle Variants
+    let variants = [];
+    if (req.body.variants) {
       try {
-        // Ensure it's stored as an array of strings (where the first element is the JSON)
-        // This matches the current fetch logic in getAllProducts/getProductById
-        specifications = [specifications];
+        const parsedVariants = JSON.parse(req.body.variants); // Expecting [{ color: 'Red', imageCount: 2 }]
+        let currentImgIdx = 0;
+
+        variants = parsedVariants.map(v => {
+          const variantImages = allImageUrls.slice(currentImgIdx, currentImgIdx + (v.imageCount || 0));
+          currentImgIdx += (v.imageCount || 0);
+          return {
+            color: v.color,
+            images: variantImages
+          };
+        });
+
+        // If there are leftover images (or main images uploaded separately without variants), 
+        // they stay in 'allImageUrls' but maybe we want to assign them to 'images' field?
+        // Let's keep 'images' field as a fallback or collection of all images.
+
       } catch (e) {
-        specifications = [];
+        variants = [];
       }
     }
 
     const productData = {
       ...req.body,
-      images: imageUrls,
-      specifications: specifications
+      images: allImageUrls, // Keep all images in main array as well for backward compatibility
+      specifications: specifications,
+      variants: variants
     };
 
     const product = await Product.create(productData);
@@ -149,19 +168,56 @@ export const updateProduct = async (req, res) => {
     if (!product)
       return res.status(404).json({ success: false, message: "Product not found" });
 
-    // append new images
+    // Append new images to main array
     if (newImages.length > 0) {
       product.images = [...product.images, ...newImages];
     }
 
-    // Handle specifications separately to ensure correct format
+    // Handle specifications
     if (req.body.specifications) {
+      // ... existing logic ...
       if (typeof req.body.specifications === 'string') {
-        product.specifications = [req.body.specifications];
+        // Try parse to array if it is notably JSON
+        try {
+          const parsed = JSON.parse(req.body.specifications);
+          if (Array.isArray(parsed)) product.specifications = parsed;
+          else product.specifications = [req.body.specifications];
+        } catch (e) {
+          product.specifications = [req.body.specifications];
+        }
       } else {
         product.specifications = req.body.specifications;
       }
       delete req.body.specifications;
+    }
+
+    // Handle Variants Update
+    if (req.body.variants) {
+      try {
+        const parsedVariants = JSON.parse(req.body.variants);
+        let currentNewImgIdx = 0;
+
+        const updatedVariants = parsedVariants.map(v => {
+          // If variant has 'imageCount' > 0, it means it expects new images from the upload batch
+          let variantImages = v.images || []; // start with existing
+
+          if (v.imageCount && v.imageCount > 0) {
+            const newBatch = newImages.slice(currentNewImgIdx, currentNewImgIdx + v.imageCount);
+            variantImages = [...variantImages, ...newBatch];
+            currentNewImgIdx += v.imageCount;
+          }
+
+          return {
+            color: v.color,
+            images: variantImages
+          };
+        });
+
+        product.variants = updatedVariants;
+      } catch (e) {
+        console.error("Variant update error", e);
+      }
+      delete req.body.variants;
     }
 
     // update other fields

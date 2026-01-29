@@ -9,7 +9,9 @@ const orderSchema = new mongoose.Schema(
         productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
         quantity: { type: Number, required: true, default: 1 },
         price: { type: Number, required: true },
-        total: { type: Number, required: true }
+        total: { type: Number, required: true },
+        color: { type: String },
+        image: { type: String }
       }
     ],
 
@@ -69,7 +71,46 @@ const orderSchema = new mongoose.Schema(
       shipped: { type: Date },
       delivered: { type: Date },
       cancelled: { type: Date }
-    }
+    },
+
+    // =================== CANCEL FIELDS ===================
+    cancelReason: { type: String },
+    cancelRequestedAt: { type: Date },
+    cancelApprovedByAdmin: { type: Boolean, default: null }, // null = pending, true = approved, false = rejected
+    cancelAdminResponse: { type: String }, // Admin's response/reason for rejection
+    cancelProcessedAt: { type: Date },
+
+    // =================== RETURN FIELDS ===================
+    returnReason: {
+      type: String,
+      enum: ["Wrong Product Delivered", "Defective / Damaged Product", null],
+      default: null
+    },
+    returnRequestedAt: { type: Date },
+    returnApprovedByAdmin: { type: Boolean, default: null }, // null = pending, true = approved, false = rejected
+    returnAdminResponse: { type: String }, // Admin's response/reason for rejection
+    returnProcessedAt: { type: Date },
+
+    // =================== REFUND FIELDS ===================
+    refundStatus: {
+      type: String,
+      enum: ["NotRequired", "Pending", "Processing", "Completed", "Rejected"],
+      default: "NotRequired"
+    },
+    refundDetails: {
+      bankName: { type: String },
+      accountNumber: { type: String },
+      ifscCode: { type: String },
+      accountHolderName: { type: String },
+      upiId: { type: String },
+      refundMethod: { type: String, enum: ["Bank Transfer", "UPI", "Original Payment Method", null] }
+    },
+    refundAmount: { type: Number, default: 0 },
+    refundProcessedAt: { type: Date },
+    refundTransactionId: { type: String },
+
+    // Track if stock was restored (to prevent double restore)
+    stockRestored: { type: Boolean, default: false }
   },
   { timestamps: true }
 );

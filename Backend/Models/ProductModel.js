@@ -55,6 +55,13 @@ const productSchema = new mongoose.Schema(
     specifications: {
       type: [],
     },
+    variants: [
+      {
+        color: { type: String, required: true },
+        images: [String],
+        // specific details per variant if needed later
+      }
+    ],
     reviews: [
       {
         name: { type: String, required: true },

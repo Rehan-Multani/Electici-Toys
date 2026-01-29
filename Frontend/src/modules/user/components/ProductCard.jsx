@@ -20,10 +20,21 @@ export function ProductCard({ product, onQuickView }) {
 
     const handleAddToCart = (e) => {
         e.stopPropagation();
-        addItem(product);
+
+        let itemToAdd = { ...product };
+        if (product.variants && product.variants.length > 0) {
+            const firstVariant = product.variants[0];
+            itemToAdd = {
+                ...itemToAdd,
+                color: firstVariant.color,
+                image: (firstVariant.images && firstVariant.images.length > 0) ? firstVariant.images[0] : (product.image || product.images?.[0])
+            };
+        }
+
+        addItem(itemToAdd);
         toast({
             title: "ADDED TO CART! 🛒",
-            description: `${product.name.toUpperCase()} IS NOW IN YOUR BAG.`,
+            description: `${product.name.toUpperCase()} (${itemToAdd.color || 'STANDARD'}) IS NOW IN YOUR BAG.`,
         });
     };
 

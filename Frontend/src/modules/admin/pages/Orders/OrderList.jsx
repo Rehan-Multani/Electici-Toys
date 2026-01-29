@@ -13,7 +13,10 @@ import {
     Clock,
     AlertCircle,
     ArrowRight,
-    ShoppingBag
+    ShoppingBag,
+    XCircle,
+    RotateCcw,
+    Banknote
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -38,7 +41,21 @@ export default function OrderList() {
         return orders.filter(o => {
             const matchesSearch = o.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 String(o.displayId || o.id).toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesStatus = statusFilter === 'All' || o.status === statusFilter;
+
+            // Special filters for cancel/return/refund
+            let matchesStatus = true;
+            if (statusFilter === 'All') {
+                matchesStatus = true;
+            } else if (statusFilter === 'CancelRequests') {
+                matchesStatus = o.cancelRequestedAt && o.cancelApprovedByAdmin === null;
+            } else if (statusFilter === 'ReturnRequests') {
+                matchesStatus = o.returnRequestedAt && o.returnApprovedByAdmin === null;
+            } else if (statusFilter === 'PendingRefunds') {
+                matchesStatus = o.refundStatus === 'Processing';
+            } else {
+                matchesStatus = o.status === statusFilter;
+            }
+
             return matchesSearch && matchesStatus;
         }).sort((a, b) => new Date(b.date) - new Date(a.date));
     }, [orders, searchQuery, statusFilter]);
@@ -71,12 +88,15 @@ export default function OrderList() {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 md:gap-6">
                 {[
                     { label: 'Total Orders', value: orders.length, icon: ShoppingBag, color: 'text-primary' },
                     { label: 'Pending', value: orders.filter(o => o.status === 'Pending').length, icon: Clock, color: 'text-amber-500' },
                     { label: 'Processing', value: orders.filter(o => o.status === 'Processing').length, icon: AlertCircle, color: 'text-blue-500' },
                     { label: 'Completed', value: orders.filter(o => o.status === 'Delivered').length, icon: CheckCircle, color: 'text-emerald-500' },
+                    { label: 'Cancel Requests', value: orders.filter(o => o.cancelRequestedAt && o.cancelApprovedByAdmin === null).length, icon: XCircle, color: 'text-red-500' },
+                    { label: 'Return Requests', value: orders.filter(o => o.returnRequestedAt && o.returnApprovedByAdmin === null).length, icon: RotateCcw, color: 'text-purple-500' },
+                    { label: 'Pending Refunds', value: orders.filter(o => o.refundStatus === 'Processing').length, icon: Banknote, color: 'text-cyan-500' },
                 ].map((stat, i) => (
                     <motion.div
                         key={i}
@@ -109,7 +129,7 @@ export default function OrderList() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 p-1 bg-background rounded-2xl border border-secondary/20">
-                    {['All', 'Pending', 'Processing', 'Shipped', 'Delivered'].map(status => (
+                    {['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(status => (
                         <button
                             key={status}
                             onClick={() => setStatusFilter(status)}
@@ -121,6 +141,28 @@ export default function OrderList() {
                             {status}
                         </button>
                     ))}
+                </div>
+
+                {/* Cancel/Return Quick Filters */}
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        onClick={() => setStatusFilter('CancelRequests')}
+                        className={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${statusFilter === 'CancelRequests' ? 'bg-red-500 text-white border-red-500' : 'border-red-500/30 text-red-500 hover:bg-red-500/10'}`}
+                    >
+                        <XCircle className="inline h-3 w-3 mr-1" /> Cancel Requests
+                    </button>
+                    <button
+                        onClick={() => setStatusFilter('ReturnRequests')}
+                        className={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${statusFilter === 'ReturnRequests' ? 'bg-purple-500 text-white border-purple-500' : 'border-purple-500/30 text-purple-500 hover:bg-purple-500/10'}`}
+                    >
+                        <RotateCcw className="inline h-3 w-3 mr-1" /> Return Requests
+                    </button>
+                    <button
+                        onClick={() => setStatusFilter('PendingRefunds')}
+                        className={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${statusFilter === 'PendingRefunds' ? 'bg-cyan-500 text-white border-cyan-500' : 'border-cyan-500/30 text-cyan-500 hover:bg-cyan-500/10'}`}
+                    >
+                        <Banknote className="inline h-3 w-3 mr-1" /> Pending Refunds
+                    </button>
                 </div>
             </div>
 

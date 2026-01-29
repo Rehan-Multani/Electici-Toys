@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAdminOrderStore } from '../../store/adminOrderStore';
 import { Button } from '../../../user/components/ui/button';
 import { Badge } from '../../../user/components/ui/badge';
 import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min.js';
 import { useToast } from '../../../user/components/Toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Truck,
     Package,
@@ -15,7 +16,13 @@ import {
     CheckCircle,
     Clock,
     AlertCircle,
-    Printer
+    Printer,
+    XCircle,
+    RotateCcw,
+    Banknote,
+    X,
+    Check,
+    AlertTriangle
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -23,9 +30,24 @@ export default function OrderDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { toast } = useToast();
-    const { getOrderById, updateOrderStatus } = useAdminOrderStore();
+    const {
+        getOrderById,
+        updateOrderStatus,
+        approveCancel,
+        rejectCancel,
+        approveReturn,
+        rejectReturn,
+        completeRefund,
+        loading
+    } = useAdminOrderStore();
     const order = getOrderById(id);
     const invoiceRef = useRef();
+
+    // Modal states
+    const [rejectModal, setRejectModal] = useState({ open: false, type: null }); // type: 'cancel' or 'return'
+    const [rejectReason, setRejectReason] = useState('');
+    const [refundModal, setRefundModal] = useState(false);
+    const [refundTransactionId, setRefundTransactionId] = useState('');
 
     const handleDownloadInvoice = async () => {
         const element = invoiceRef.current;
@@ -48,8 +70,8 @@ export default function OrderDetail() {
                 margin: [15, 10], // Increased top margin, 10mm side margins
                 filename: `Invoice_${order.displayId}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
+                html2canvas: {
+                    scale: 2,
                     useCORS: true,
                     letterRendering: true,
                     logging: false,
@@ -59,7 +81,7 @@ export default function OrderDetail() {
             };
 
             await html2pdf().set(opt).from(element).save();
-            
+
             toast({
                 title: "Success",
                 description: "Invoice downloaded successfully!",
@@ -97,6 +119,57 @@ export default function OrderDetail() {
     const statusSteps = ['Pending', 'Processing', 'Shipped', 'Delivered'];
     const currentStepIndex = statusSteps.indexOf(order.status);
     const isOnlinePayment = ['RAZORPAY', 'CARD', 'ONLINE', 'RAZORPAY_PAYMENT'].includes(order.paymentMethod?.toUpperCase());
+
+    // Cancel/Return action handlers
+    const handleApproveCancel = async () => {
+        const result = await approveCancel(order.id);
+        toast({
+            title: result.success ? "Success" : "Error",
+            description: result.message,
+            variant: result.success ? "success" : "destructive"
+        });
+    };
+
+    const handleApproveReturn = async () => {
+        const result = await approveReturn(order.id);
+        toast({
+            title: result.success ? "Success" : "Error",
+            description: result.message,
+            variant: result.success ? "success" : "destructive"
+        });
+    };
+
+    const handleReject = async () => {
+        if (!rejectReason.trim()) {
+            toast({ title: "Error", description: "Please enter a reason", variant: "destructive" });
+            return;
+        }
+        const action = rejectModal.type === 'cancel' ? rejectCancel : rejectReturn;
+        const result = await action(order.id, rejectReason);
+        toast({
+            title: result.success ? "Success" : "Error",
+            description: result.message,
+            variant: result.success ? "success" : "destructive"
+        });
+        setRejectModal({ open: false, type: null });
+        setRejectReason('');
+    };
+
+    const handleCompleteRefund = async () => {
+        const result = await completeRefund(order.id, refundTransactionId);
+        toast({
+            title: result.success ? "Success" : "Error",
+            description: result.message,
+            variant: result.success ? "success" : "destructive"
+        });
+        setRefundModal(false);
+        setRefundTransactionId('');
+    };
+
+    // Check if order has pending cancel/return request
+    const hasPendingCancel = order.cancelRequestedAt && order.cancelApprovedByAdmin === null;
+    const hasPendingReturn = order.returnRequestedAt && order.returnApprovedByAdmin === null;
+    const hasPendingRefund = order.refundStatus === 'Processing';
 
     return (
         <div className="p-8 max-w-6xl mx-auto space-y-8">
@@ -192,6 +265,7 @@ export default function OrderDetail() {
                                     <div className="flex-1">
                                         <h4 className="font-bold uppercase italic tracking-tight text-lg">{item.name}</h4>
                                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Qty: {item.quantity} × ₹{item.price.toLocaleString()}</p>
+                                        {item.color && <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-1">Color: {item.color}</p>}
                                     </div>
                                     <div className="text-xl font-black italic tracking-tighter">
                                         ₹{(item.price * item.quantity).toLocaleString()}
@@ -303,8 +377,8 @@ export default function OrderDetail() {
             </div>
 
             {/* Hidden Invoice Template - using display block/height 0 and inline colors to avoid oklch errors */}
-            <div 
-                style={{ 
+            <div
+                style={{
                     display: 'block',
                     height: 0,
                     overflow: 'hidden',
@@ -363,6 +437,7 @@ export default function OrderDetail() {
                                 <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
                                     <td style={{ padding: '16px 0' }}>
                                         <p style={{ margin: 0, fontWeight: '700', textTransform: 'uppercase', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#111827' }}>{item.name}</p>
+                                        {item.color && <p style={{ margin: '4px 0 0 0', fontSize: '10px', fontWeight: '700', color: '#6B7280' }}>COLOR: {item.color}</p>}
                                     </td>
                                     <td style={{ padding: '16px 0', textAlign: 'center', fontWeight: '700', color: '#111827' }}>₹{item.price.toLocaleString()}</td>
                                     <td style={{ padding: '16px 0', textAlign: 'center', fontWeight: '700', color: '#111827' }}>{item.quantity}</td>
@@ -409,6 +484,251 @@ export default function OrderDetail() {
                     </div>
                 </div>
             </div>
+
+            {/* Cancel/Return Request Actions */}
+            {(hasPendingCancel || hasPendingReturn || hasPendingRefund) && (
+                <div className="space-y-6">
+                    {/* Pending Cancel Request */}
+                    {hasPendingCancel && (
+                        <div className="bg-red-500/10 border-2 border-red-500/30 rounded-[2rem] p-8">
+                            <div className="flex items-start gap-4 mb-6">
+                                <div className="h-12 w-12 bg-red-500/20 rounded-2xl flex items-center justify-center">
+                                    <XCircle className="h-6 w-6 text-red-500" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-black italic uppercase tracking-tighter text-red-500">Cancel Request Pending</h3>
+                                    <p className="text-sm text-muted-foreground mt-1">User requested to cancel this order</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-background/50 rounded-xl p-4 mb-6">
+                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Cancel Reason</p>
+                                <p className="text-sm font-medium">{order.cancelReason || 'No reason provided'}</p>
+                                <p className="text-xs text-muted-foreground mt-2">Requested: {order.cancelRequestedAt ? format(new Date(order.cancelRequestedAt), 'MMM dd, yyyy h:mm a') : 'N/A'}</p>
+                            </div>
+
+                            {order.refundDetails && (
+                                <div className="bg-background/50 rounded-xl p-4 mb-6">
+                                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Refund Details</p>
+                                    <p className="text-sm">Method: {order.refundDetails.refundMethod}</p>
+                                    {order.refundDetails.refundMethod === 'Bank Transfer' && (
+                                        <>
+                                            <p className="text-sm">Account: {order.refundDetails.accountHolderName}</p>
+                                            <p className="text-sm">Bank: {order.refundDetails.bankName} | A/C: {order.refundDetails.accountNumber}</p>
+                                            <p className="text-sm">IFSC: {order.refundDetails.ifscCode}</p>
+                                        </>
+                                    )}
+                                    {order.refundDetails.refundMethod === 'UPI' && (
+                                        <p className="text-sm">UPI ID: {order.refundDetails.upiId}</p>
+                                    )}
+                                </div>
+                            )}
+
+                            <div className="flex gap-4">
+                                <Button
+                                    onClick={handleApproveCancel}
+                                    disabled={loading}
+                                    className="flex-1 h-12 rounded-full bg-green-500 hover:bg-green-600 font-black uppercase tracking-widest"
+                                >
+                                    <Check className="mr-2 h-4 w-4" /> Approve Cancel
+                                </Button>
+                                <Button
+                                    onClick={() => setRejectModal({ open: true, type: 'cancel' })}
+                                    variant="outline"
+                                    className="flex-1 h-12 rounded-full border-red-500 text-red-500 hover:bg-red-500/10 font-black uppercase tracking-widest"
+                                >
+                                    <X className="mr-2 h-4 w-4" /> Reject
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Pending Return Request */}
+                    {hasPendingReturn && (
+                        <div className="bg-purple-500/10 border-2 border-purple-500/30 rounded-[2rem] p-8">
+                            <div className="flex items-start gap-4 mb-6">
+                                <div className="h-12 w-12 bg-purple-500/20 rounded-2xl flex items-center justify-center">
+                                    <RotateCcw className="h-6 w-6 text-purple-500" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-black italic uppercase tracking-tighter text-purple-500">Return Request Pending</h3>
+                                    <p className="text-sm text-muted-foreground mt-1">User requested to return this order</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-background/50 rounded-xl p-4 mb-6">
+                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Return Reason</p>
+                                <p className="text-sm font-medium">{order.returnReason || 'No reason provided'}</p>
+                                <p className="text-xs text-muted-foreground mt-2">Requested: {order.returnRequestedAt ? format(new Date(order.returnRequestedAt), 'MMM dd, yyyy h:mm a') : 'N/A'}</p>
+                            </div>
+
+                            <div className="flex gap-4">
+                                <Button
+                                    onClick={handleApproveReturn}
+                                    disabled={loading}
+                                    className="flex-1 h-12 rounded-full bg-green-500 hover:bg-green-600 font-black uppercase tracking-widest"
+                                >
+                                    <Check className="mr-2 h-4 w-4" /> Approve Return
+                                </Button>
+                                <Button
+                                    onClick={() => setRejectModal({ open: true, type: 'return' })}
+                                    variant="outline"
+                                    className="flex-1 h-12 rounded-full border-purple-500 text-purple-500 hover:bg-purple-500/10 font-black uppercase tracking-widest"
+                                >
+                                    <X className="mr-2 h-4 w-4" /> Reject
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Pending Refund */}
+                    {hasPendingRefund && (
+                        <div className="bg-cyan-500/10 border-2 border-cyan-500/30 rounded-[2rem] p-8">
+                            <div className="flex items-start gap-4 mb-6">
+                                <div className="h-12 w-12 bg-cyan-500/20 rounded-2xl flex items-center justify-center">
+                                    <Banknote className="h-6 w-6 text-cyan-500" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-black italic uppercase tracking-tighter text-cyan-500">Refund Processing</h3>
+                                    <p className="text-sm text-muted-foreground mt-1">Refund of ₹{order.refundAmount?.toLocaleString()} is pending</p>
+                                </div>
+                            </div>
+
+                            {order.refundDetails && (
+                                <div className="bg-background/50 rounded-xl p-4 mb-6">
+                                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Refund To</p>
+                                    <p className="text-sm">Method: {order.refundDetails.refundMethod}</p>
+                                    {order.refundDetails.refundMethod === 'Bank Transfer' && (
+                                        <>
+                                            <p className="text-sm">Account: {order.refundDetails.accountHolderName}</p>
+                                            <p className="text-sm">Bank: {order.refundDetails.bankName} | A/C: {order.refundDetails.accountNumber}</p>
+                                            <p className="text-sm">IFSC: {order.refundDetails.ifscCode}</p>
+                                        </>
+                                    )}
+                                    {order.refundDetails.refundMethod === 'UPI' && (
+                                        <p className="text-sm">UPI ID: {order.refundDetails.upiId}</p>
+                                    )}
+                                </div>
+                            )}
+
+                            <Button
+                                onClick={() => setRefundModal(true)}
+                                className="w-full h-12 rounded-full bg-cyan-500 hover:bg-cyan-600 font-black uppercase tracking-widest"
+                            >
+                                <Check className="mr-2 h-4 w-4" /> Mark Refund Complete
+                            </Button>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Reject Modal */}
+            <AnimatePresence>
+                {rejectModal.open && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                        onClick={() => setRejectModal({ open: false, type: null })}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="bg-background border border-secondary/20 rounded-3xl p-8 max-w-md w-full"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-xl font-black italic uppercase tracking-tighter flex items-center gap-3">
+                                    <AlertTriangle className="h-5 w-5 text-red-500" />
+                                    Reject {rejectModal.type === 'cancel' ? 'Cancel' : 'Return'} Request
+                                </h2>
+                                <button onClick={() => setRejectModal({ open: false, type: null })} className="p-2 hover:bg-secondary/20 rounded-full">
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2 block">Rejection Reason *</label>
+                                    <textarea
+                                        value={rejectReason}
+                                        onChange={(e) => setRejectReason(e.target.value)}
+                                        placeholder="Enter reason for rejection..."
+                                        className="w-full h-24 bg-secondary/10 border border-secondary/20 rounded-xl p-4 outline-none focus:ring-2 focus:ring-primary/20 text-sm resize-none"
+                                    />
+                                </div>
+
+                                <Button
+                                    onClick={handleReject}
+                                    disabled={loading}
+                                    className="w-full h-12 rounded-full bg-red-500 hover:bg-red-600 font-black uppercase tracking-widest"
+                                >
+                                    {loading ? 'Processing...' : 'Confirm Rejection'}
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Refund Complete Modal */}
+            <AnimatePresence>
+                {refundModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                        onClick={() => setRefundModal(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="bg-background border border-secondary/20 rounded-3xl p-8 max-w-md w-full"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-xl font-black italic uppercase tracking-tighter flex items-center gap-3">
+                                    <Banknote className="h-5 w-5 text-cyan-500" /> Complete Refund
+                                </h2>
+                                <button onClick={() => setRefundModal(false)} className="p-2 hover:bg-secondary/20 rounded-full">
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="p-4 bg-cyan-500/10 rounded-xl">
+                                    <p className="text-lg font-black text-cyan-500">₹{order.refundAmount?.toLocaleString()}</p>
+                                    <p className="text-xs text-muted-foreground">Refund Amount</p>
+                                </div>
+
+                                <div>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2 block">Transaction ID (Optional)</label>
+                                    <input
+                                        type="text"
+                                        value={refundTransactionId}
+                                        onChange={(e) => setRefundTransactionId(e.target.value)}
+                                        placeholder="Enter refund transaction ID..."
+                                        className="w-full bg-secondary/10 border border-secondary/20 rounded-xl p-4 outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                                    />
+                                </div>
+
+                                <Button
+                                    onClick={handleCompleteRefund}
+                                    disabled={loading}
+                                    className="w-full h-12 rounded-full bg-cyan-500 hover:bg-cyan-600 font-black uppercase tracking-widest"
+                                >
+                                    {loading ? 'Processing...' : 'Mark as Completed'}
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
+

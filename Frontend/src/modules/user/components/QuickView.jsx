@@ -67,7 +67,16 @@ export function QuickView({ product, open, onOpenChange }) {
                                 size="lg"
                                 className="w-full h-14 rounded-full font-black italic tracking-tighter text-xl group"
                                 onClick={() => {
-                                    addItem(product);
+                                    let itemToAdd = { ...product };
+                                    if (product.variants && product.variants.length > 0) {
+                                        const firstVariant = product.variants[0];
+                                        itemToAdd = {
+                                            ...itemToAdd,
+                                            color: firstVariant.color,
+                                            image: (firstVariant.images && firstVariant.images.length > 0) ? firstVariant.images[0] : (product.image || product.images?.[0])
+                                        };
+                                    }
+                                    addItem(itemToAdd);
                                     onOpenChange(false);
                                 }}
                             >
