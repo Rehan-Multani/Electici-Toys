@@ -7,12 +7,21 @@ import { useAdminAuthStore } from '../store/adminAuthStore';
 
 export default function AdminLayout() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const { admin, logout } = useAdminAuthStore();
     const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
         navigate('/admin/login');
+    };
+
+    const handleSearch = (e) => {
+        if (e.key === 'Enter' && searchQuery.trim()) {
+            // Navigate to products page with search query
+            navigate(`/admin/products?search=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery('');
+        }
     };
 
     return (
@@ -35,6 +44,9 @@ export default function AdminLayout() {
                             <input
                                 type="text"
                                 placeholder="Search products, orders..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={handleSearch}
                                 className="bg-transparent border-none outline-none text-xs w-full uppercase tracking-widest font-bold"
                             />
                         </div>

@@ -31,6 +31,7 @@ export function Header() {
     const [scrolled, setScrolled] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState("");
     const [mobileSearchExpanded, setMobileSearchExpanded] = React.useState(false);
+    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
     React.useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -94,7 +95,7 @@ export function Header() {
                     <div className="flex items-center gap-2 lg:gap-12 shrink-0">
                         {/* Mobile Menu Trigger */}
                         <div className="lg:hidden">
-                            <Sheet>
+                            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                                 <SheetTrigger asChild>
                                     <Button variant="ghost" size="icon" className="-ml-2 hover:bg-primary/10">
                                         <Menu className="h-6 w-6 md:h-7 md:w-7" />
@@ -109,7 +110,7 @@ export function Header() {
                                     </SheetHeader>
 
                                     <nav className="flex flex-col gap-1 mt-2 items-center w-full">
-                                        <NavLinks mobile onClick={() => { }} />
+                                        <NavLinks mobile onClick={() => setIsSheetOpen(false)} />
 
                                         <div className="w-full h-px bg-white/5 my-4" />
 
@@ -118,6 +119,7 @@ export function Header() {
                                             {/* Wishlist */}
                                             <Link
                                                 to="/wishlist"
+                                                onClick={() => setIsSheetOpen(false)}
                                                 className="flex flex-col items-center gap-2 group"
                                             >
                                                 <div className="h-10 w-10 rounded-full glass flex items-center justify-center group-hover:text-primary transition-colors">
@@ -129,6 +131,7 @@ export function Header() {
                                             {/* Notifications */}
                                             <Link
                                                 to="/notifications"
+                                                onClick={() => setIsSheetOpen(false)}
                                                 className="flex flex-col items-center gap-2 group relative"
                                             >
                                                 <div className="h-10 w-10 rounded-full glass flex items-center justify-center group-hover:text-primary transition-colors relative">

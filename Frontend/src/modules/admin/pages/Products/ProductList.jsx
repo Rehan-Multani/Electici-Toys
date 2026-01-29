@@ -30,16 +30,27 @@ import {
     SelectTrigger,
     SelectValue
 } from '../../../user/components/ui/select';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from '../../../user/components/Toast';
 
 export default function ProductList() {
     const { products, deleteProduct, toggleStatus, categories, fetchCategories } = useAdminProductStore();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { toast } = useToast();
-    const [searchQuery, setSearchQuery] = useState('');
+
+    // Initialize search from URL params
+    const searchFromUrl = searchParams.get('search') || '';
+    const [searchQuery, setSearchQuery] = useState(searchFromUrl);
     const [statusFilter, setStatusFilter] = useState('All');
     const [categoryFilter, setCategoryFilter] = useState('All');
+
+    // Update search when URL changes
+    useEffect(() => {
+        if (searchFromUrl) {
+            setSearchQuery(searchFromUrl);
+        }
+    }, [searchFromUrl]);
 
     useEffect(() => {
         fetchCategories();
@@ -54,9 +65,21 @@ export default function ProductList() {
 
     const filteredProducts = useMemo(() => {
         return products.filter(p => {
-            const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                p.description.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesStatus = statusFilter === 'All' || p.status === statusFilter;
+            const matchesSearch = p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                p.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+            // Status filter logic
+            let matchesStatus = true;
+            if (statusFilter === 'All') {
+                matchesStatus = true;
+            } else if (statusFilter === 'Out of Stock') {
+                matchesStatus = p.stock <= 0;
+            } else if (statusFilter === 'Active') {
+                matchesStatus = p.status === 'Active' && p.stock > 0;
+            } else if (statusFilter === 'Draft') {
+                matchesStatus = p.status === 'Draft';
+            }
+
             const matchesCategory = categoryFilter === 'All' || p.category === categoryFilter;
             return matchesSearch && matchesStatus && matchesCategory;
         });

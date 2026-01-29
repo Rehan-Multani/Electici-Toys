@@ -47,6 +47,8 @@ export default function ProductForm() {
         specs: [{ key: '', value: '' }]
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const filteredCategories = categories.filter(c =>
         (c.categoryName || c).toLowerCase().includes(categorySearch.toLowerCase())
     );
@@ -206,90 +208,102 @@ export default function ProductForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
 
-        const data = new FormData();
-        data.append('productName', formData.name);
-        data.append('description', formData.description);
+        setIsSubmitting(true);
+        try {
+            const data = new FormData();
+            data.append('productName', formData.name);
+            data.append('description', formData.description);
 
-        // Correct price and stock mapping for backend ProductModel
-        const sellingPrice = parseFloat(formData.price) || 0;
-        const actualPrice = parseFloat(formData.originalPrice) || sellingPrice;
+            // Correct price and stock mapping for backend ProductModel
+            const sellingPrice = parseFloat(formData.price) || 0;
+            const actualPrice = parseFloat(formData.originalPrice) || sellingPrice;
 
-        data.append('sellingPrice', sellingPrice);
-        data.append('actualPrice', actualPrice);
-        data.append('quantity', formData.stock);
+            data.append('sellingPrice', sellingPrice);
+            data.append('actualPrice', actualPrice);
+            data.append('quantity', formData.stock);
 
-        // SKU handling: generate for new products, keep for existing if needed
-        // Since the form doesn't have a SKU field, we generate one.
-        const sku = isEdit ? (formData.sku || `TOY-${Date.now()}`) : `TOY-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-        data.append('sku', sku);
+            // SKU handling: generate for new products, keep for existing if needed
+            // Since the form doesn't have a SKU field, we generate one.
+            const sku = isEdit ? (formData.sku || `TOY-${Date.now()}`) : `TOY-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+            data.append('sku', sku);
 
-        if (formData.category) {
-            data.append('categoryId', formData.category);
-        } else {
-            // If category is required by backend, this might still fail.
-            // But we'll let the user see the toast error if it does.
-        }
+            if (formData.category) {
+                data.append('categoryId', formData.category);
+            } else {
+                // If category is required by backend, this might still fail.
+                // But we'll let the user see the toast error if it does.
+            }
 
-        data.append('isActive', formData.status === 'Active');
+            data.append('isActive', formData.status === 'Active');
 
 
 
-        // Specs: Backend expects 'specifications' as a JSON string or array
-        // Based on ProductCtrl.js: createProduct takes ...req.body.
-        // If we send specifications as a stringified array of objects, the backend might just save it as is.
-        // However, ProductModel defines specifications as [], so we should send it so it can be parsed or stored.
-        // Let's send it as a JSON string to be safe, as FormData converts everything to string anyway.
-        const validSpecs = formData.specs.filter(s => s.key && s.value);
-        if (validSpecs.length > 0) {
-            // Send as stringified JSON array
-            data.append('specifications', JSON.stringify(validSpecs));
-        } else {
-            data.append('specifications', JSON.stringify([]));
-        }
+            // Specs: Backend expects 'specifications' as a JSON string or array
+            // Based on ProductCtrl.js: createProduct takes ...req.body.
+            // If we send specifications as a stringified array of objects, the backend might just save it as is.
+            // However, ProductModel defines specifications as [], so we should send it so it can be parsed or stored.
+            // Let's send it as a JSON string to be safe, as FormData converts everything to string anyway.
+            const validSpecs = formData.specs.filter(s => s.key && s.value);
+            if (validSpecs.length > 0) {
+                // Send as stringified JSON array
+                data.append('specifications', JSON.stringify(validSpecs));
+            } else {
+                data.append('specifications', JSON.stringify([]));
+            }
 
-        // Variants Handling
-        // We enforce 1 image per variant in this simplified form.
+            // Variants Handling
+            // We enforce 1 image per variant in this simplified form.
 
-        const textVariants = variants.map(v => ({
-            color: v.color,
-            images: v.existingImage ? [v.existingImage] : [],
-            imageCount: v.file ? 1 : 0
-        }));
+            const textVariants = variants.map(v => ({
+                color: v.color,
+                images: v.existingImage ? [v.existingImage] : [],
+                imageCount: v.file ? 1 : 0
+            }));
 
-        data.append('variants', JSON.stringify(textVariants));
+            data.append('variants', JSON.stringify(textVariants));
 
-        // Append variant files
-        variants.forEach(v => {
-            if (v.file) data.append('images', v.file);
-        });
-
-        // Append General files (if any)
-        if (selectedFiles.length > 0) {
-            selectedFiles.forEach(file => {
-                data.append('images', file);
+            // Append variant files
+            variants.forEach(v => {
+                if (v.file) data.append('images', v.file);
             });
-        }
 
-        let result;
-        if (isEdit) {
-            result = await updateProduct(id, data);
-            if (result.success) {
-                toast({ title: "Toy Updated!", description: `${formData.name} has been refreshed.` });
-            } else {
-                toast({ title: "Update Failed", description: result.error, variant: "destructive" });
+            // Append General files (if any)
+            if (selectedFiles.length > 0) {
+                selectedFiles.forEach(file => {
+                    data.append('images', file);
+                });
             }
-        } else {
-            result = await addProduct(data);
-            if (result.success) {
-                toast({ title: "New Toy Added!", description: `${formData.name} is now available.` });
-            } else {
-                toast({ title: "Add Failed", description: result.error, variant: "destructive" });
-            }
-        }
 
-        if (result.success) {
-            navigate('/admin/products');
+            let result;
+            if (isEdit) {
+                result = await updateProduct(id, data);
+                if (result.success) {
+                    toast({ title: "Toy Updated!", description: `${formData.name} has been refreshed.` });
+                } else {
+                    toast({ title: "Update Failed", description: result.error, variant: "destructive" });
+                }
+            } else {
+                result = await addProduct(data);
+                if (result.success) {
+                    toast({ title: "New Toy Added!", description: `${formData.name} is now available.` });
+                } else {
+                    toast({ title: "Add Failed", description: result.error, variant: "destructive" });
+                }
+            }
+
+            if (result.success) {
+                navigate('/admin/products');
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: error.message || "An unexpected error occurred",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -583,10 +597,20 @@ export default function ProductForm() {
                     <div className="sticky bottom-8 z-20 flex gap-3 md:gap-4">
                         <Button
                             type="submit"
-                            className="flex-1 h-12 md:h-14 rounded-full font-black italic tracking-widest uppercase shadow-xl shadow-primary/20 text-xs md:text-sm"
+                            disabled={isSubmitting}
+                            className="flex-1 h-12 md:h-14 rounded-full font-black italic tracking-widest uppercase shadow-xl shadow-primary/20 text-xs md:text-sm disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            <Save className="mr-2 h-4 w-4 md:h-5 md:w-5" />
-                            {isEdit ? 'Update Toy' : 'Save Toy'}
+                            {isSubmitting ? (
+                                <>
+                                    <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                                    SAVING...
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+                                    {isEdit ? 'Update Toy' : 'Save Toy'}
+                                </>
+                            )}
                         </Button>
                         <Button
                             type="button"
