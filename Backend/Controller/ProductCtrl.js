@@ -2,9 +2,9 @@ import Product from "../Models/ProductModel.js";
 import { uploadToCloudinary } from "../Cloudinary/CloudinaryHelper.js";
 
 /* ================= CREATE PRODUCT ================= */
+/* ================= CREATE PRODUCT ================= */
 export const createProduct = async (req, res) => {
   try {
-
     const existingProduct = await Product.findOne({
       $or: [
         { productName: req.body.productName },
@@ -27,41 +27,51 @@ export const createProduct = async (req, res) => {
       }
     }
 
-    // Handle specifications
-    let specifications = req.body.specifications;
-    if (specifications) {
+    // IDK why but sometimes specifications/variants come as ["[...]"] (double encoded) or just "[...]"
+    const parseMixedData = (data) => {
       try {
-        if (typeof specifications === 'string') {
-          specifications = JSON.parse(specifications);
-        } else if (Array.isArray(specifications) && typeof specifications[0] === 'string') {
-          try { specifications = JSON.parse(specifications[0]); } catch (e) { /* not json */ }
+        if (!data) return [];
+        if (typeof data === 'string') return JSON.parse(data);
+        if (Array.isArray(data)) {
+          if (data.length === 0) return [];
+          // Check if it is a single string that contains JSON
+          if (data.length === 1 && typeof data[0] === 'string') {
+            try {
+              const parsed = JSON.parse(data[0]);
+              return Array.isArray(parsed) ? parsed : [parsed];
+            } catch (e) {
+              // If parse fails, maybe it's just a regular string array?
+              // Try parsing it as individual json items if they look like objects?
+            }
+          }
+          // Check if it's an array of JSON strings
+          if (typeof data[0] === 'string') {
+            return data.map(item => {
+              try { return JSON.parse(item); } catch (e) { return item; }
+            });
+          }
+          return data;
         }
+        return [];
       } catch (e) {
-        specifications = Array.isArray(specifications) ? specifications : [];
+        console.error("Parsing error", e);
+        return [];
       }
-    }
+    };
+
+    // Handle specifications
+    let specifications = parseMixedData(req.body.specifications);
 
     // Handle Variants
     let variants = [];
     if (req.body.variants) {
       try {
-        let rawVariants = req.body.variants;
-        if (typeof rawVariants === 'string') {
-          rawVariants = JSON.parse(rawVariants);
-        } else if (Array.isArray(rawVariants) && typeof rawVariants[0] === 'string') {
-          try {
-            const parsed = JSON.parse(rawVariants[0]);
-            if (Array.isArray(parsed)) rawVariants = parsed;
-          } catch (e) { /* keep as is */ }
-        }
-
-        const parsedVariants = Array.isArray(rawVariants) ? rawVariants : [];
+        const parsedVariants = parseMixedData(req.body.variants);
         let currentImgIdx = 0;
 
         variants = parsedVariants.map(v => {
-          // Ensure we have an object
           const variantObj = (typeof v === 'string') ? JSON.parse(v) : v;
-          
+
           let variantImages = Array.isArray(variantObj.images) ? variantObj.images : [];
           const count = Number(variantObj.imageCount) || 0;
 
@@ -70,7 +80,7 @@ export const createProduct = async (req, res) => {
             variantImages = [...variantImages, ...mapped];
           }
           currentImgIdx += count;
-          
+
           return {
             color: variantObj.color || "Default",
             images: variantImages
@@ -78,7 +88,7 @@ export const createProduct = async (req, res) => {
         });
       } catch (e) {
         console.error("Variant processing error:", e);
-        variants = Array.isArray(req.body.variants) ? req.body.variants : [];
+        variants = [];
       }
     }
 
@@ -211,45 +221,52 @@ export const updateProduct = async (req, res) => {
       product.images = [...product.images, ...newImages];
     }
 
+    // IDK why but sometimes specifications/variants come as ["[...]"] (double encoded) or just "[...]"
+    const parseMixedData = (data) => {
+      try {
+        if (!data) return [];
+        if (typeof data === 'string') return JSON.parse(data);
+        if (Array.isArray(data)) {
+          if (data.length === 0) return [];
+          // Check if it is a single string that contains JSON
+          if (data.length === 1 && typeof data[0] === 'string') {
+            try {
+              const parsed = JSON.parse(data[0]);
+              return Array.isArray(parsed) ? parsed : [parsed];
+            } catch (e) {
+              // If parse fails, maybe it's just a regular string array?
+            }
+          }
+          // Check if it's an array of JSON strings
+          if (typeof data[0] === 'string') {
+            return data.map(item => {
+              try { return JSON.parse(item); } catch (e) { return item; }
+            });
+          }
+          return data;
+        }
+        return [];
+      } catch (e) {
+        console.error("Parsing error", e);
+        return [];
+      }
+    };
+
     // Handle specifications
     if (req.body.specifications) {
-      let specs = req.body.specifications;
-      try {
-        if (typeof specs === 'string') {
-          specs = JSON.parse(specs);
-        } else if (Array.isArray(specs) && typeof specs[0] === 'string') {
-          try {
-            const parsed = JSON.parse(specs[0]);
-            if (Array.isArray(parsed)) specs = parsed;
-          } catch (e) { /* not json */ }
-        }
-        if (Array.isArray(specs)) product.specifications = specs;
-        else product.specifications = [req.body.specifications];
-      } catch (e) {
-        product.specifications = Array.isArray(specs) ? specs : [req.body.specifications];
-      }
+      product.specifications = parseMixedData(req.body.specifications);
       delete req.body.specifications;
     }
 
     // Handle Variants Update
     if (req.body.variants) {
       try {
-        let rawVariants = req.body.variants;
-        if (typeof rawVariants === 'string') {
-          rawVariants = JSON.parse(rawVariants);
-        } else if (Array.isArray(rawVariants) && typeof rawVariants[0] === 'string') {
-          try {
-            const parsed = JSON.parse(rawVariants[0]);
-            if (Array.isArray(parsed)) rawVariants = parsed;
-          } catch (e) { /* keep as is */ }
-        }
-
-        const parsedVariants = Array.isArray(rawVariants) ? rawVariants : [];
+        const parsedVariants = parseMixedData(req.body.variants);
         let currentNewImgIdx = 0;
 
         const updatedVariants = parsedVariants.map(v => {
           const variantObj = (typeof v === 'string') ? JSON.parse(v) : v;
-          
+
           let variantImages = Array.isArray(variantObj.images) ? variantObj.images : [];
           const count = Number(variantObj.imageCount) || 0;
 
