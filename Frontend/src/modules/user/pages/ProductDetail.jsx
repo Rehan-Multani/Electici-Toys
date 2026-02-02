@@ -227,7 +227,7 @@ export function ProductDetail() {
                             <span className="text-xs md:text-sm font-black italic text-muted-foreground uppercase">{product.rating} / 5.0 Rating</span>
                         </div>
 
-                        <p className="text-sm md:text-base text-muted-foreground font-medium italic mb-6 leading-relaxed border-l-4 border-primary/30 pl-4 py-2 bg-primary/5">
+                        <p className="text-sm md:text-base text-muted-foreground font-medium italic mb-6 leading-relaxed border-l-4 border-primary/30 pl-4 py-2 bg-primary/5 whitespace-pre-wrap">
                             {product.description || "No description available for this awesome toy."}
                         </p>
 
