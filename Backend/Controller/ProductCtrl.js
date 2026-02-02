@@ -37,11 +37,20 @@ export const createProduct = async (req, res) => {
     let variants = [];
     if (req.body.variants) {
       try {
-        const parsedVariants = JSON.parse(req.body.variants); // Expecting [{ color: 'Red', imageCount: 2 }]
+        const parsedVariants = typeof req.body.variants === "string"
+          ? JSON.parse(req.body.variants)
+          : Array.isArray(req.body.variants)
+            ? req.body.variants
+            : [];
         let currentImgIdx = 0;
 
         variants = parsedVariants.map(v => {
-          const variantImages = allImageUrls.slice(currentImgIdx, currentImgIdx + (v.imageCount || 0));
+          let variantImages = Array.isArray(v.images) ? v.images : [];
+          const count = Number(v.imageCount) || 0;
+          if (count > 0) {
+            const mapped = allImageUrls.slice(currentImgIdx, currentImgIdx + count);
+            variantImages = [...variantImages, ...mapped];
+          }
           currentImgIdx += (v.imageCount || 0);
           return {
             color: v.color,
@@ -54,7 +63,7 @@ export const createProduct = async (req, res) => {
         // Let's keep 'images' field as a fallback or collection of all images.
 
       } catch (e) {
-        variants = [];
+        variants = Array.isArray(req.body.variants) ? req.body.variants : [];
       }
     }
 
@@ -95,9 +104,16 @@ export const getAllProducts = async (req, res) => {
       let specs = [];
 
       if (Array.isArray(product.specifications) && product.specifications.length > 0) {
-        try {
-          specs = JSON.parse(product.specifications[0]); // string to object
-        } catch (err) {
+        const first = product.specifications[0];
+        if (typeof first === "string") {
+          try {
+            specs = JSON.parse(first);
+          } catch {
+            specs = [];
+          }
+        } else if (typeof first === "object") {
+          specs = product.specifications;
+        } else {
           specs = [];
         }
       }
@@ -132,9 +148,16 @@ export const getProductById = async (req, res) => {
     // Clean specifications
     let specs = [];
     if (Array.isArray(productRaw.specifications) && productRaw.specifications.length > 0) {
-      try {
-        specs = JSON.parse(productRaw.specifications[0]); // string -> object
-      } catch (err) {
+      const first = productRaw.specifications[0];
+      if (typeof first === "string") {
+        try {
+          specs = JSON.parse(first);
+        } catch {
+          specs = [];
+        }
+      } else if (typeof first === "object") {
+        specs = productRaw.specifications;
+      } else {
         specs = [];
       }
     }
@@ -194,7 +217,11 @@ export const updateProduct = async (req, res) => {
     // Handle Variants Update
     if (req.body.variants) {
       try {
-        const parsedVariants = JSON.parse(req.body.variants);
+        const parsedVariants = typeof req.body.variants === "string"
+          ? JSON.parse(req.body.variants)
+          : Array.isArray(req.body.variants)
+            ? req.body.variants
+            : [];
         let currentNewImgIdx = 0;
 
         const updatedVariants = parsedVariants.map(v => {
