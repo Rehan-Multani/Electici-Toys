@@ -79,12 +79,15 @@ export const createProduct = async (req, res) => {
     // Handle Variants
     let variants = [];
     if (req.body.variants) {
-      try {
-        const parsedVariants = parseMixedData(req.body.variants);
-        let currentImgIdx = 0;
+      const parsedVariants = parseMixedData(req.body.variants);
+      let currentImgIdx = 0;
 
-        variants = parsedVariants.map(v => {
+      variants = parsedVariants.map(v => {
+        try {
           const variantObj = (typeof v === 'string') ? JSON.parse(v) : v;
+
+          // If it's still not an object (e.g. parsed to a number/string), skip it
+          if (!variantObj || typeof variantObj !== 'object') return null;
 
           let variantImages = Array.isArray(variantObj.images) ? variantObj.images : [];
           const count = Number(variantObj.imageCount) || 0;
@@ -99,11 +102,11 @@ export const createProduct = async (req, res) => {
             color: variantObj.color || "Default",
             images: variantImages
           };
-        });
-      } catch (e) {
-        console.error("Variant processing error:", e);
-        variants = [];
-      }
+        } catch (e) {
+          console.error("Skipping invalid variant item:", v, e);
+          return null;
+        }
+      }).filter(item => item !== null);
     }
 
     const productData = {
@@ -281,12 +284,15 @@ export const updateProduct = async (req, res) => {
 
     // Handle Variants Update
     if (req.body.variants) {
-      try {
-        const parsedVariants = parseMixedData(req.body.variants);
-        let currentNewImgIdx = 0;
+      const parsedVariants = parseMixedData(req.body.variants);
+      let currentNewImgIdx = 0;
 
-        const updatedVariants = parsedVariants.map(v => {
+      const updatedVariants = parsedVariants.map(v => {
+        try {
           const variantObj = (typeof v === 'string') ? JSON.parse(v) : v;
+
+          // If it's still not an object (e.g. parsed to a number/string), skip it
+          if (!variantObj || typeof variantObj !== 'object') return null;
 
           let variantImages = Array.isArray(variantObj.images) ? variantObj.images : [];
           const count = Number(variantObj.imageCount) || 0;
@@ -301,12 +307,13 @@ export const updateProduct = async (req, res) => {
             color: variantObj.color || "Default",
             images: variantImages
           };
-        });
+        } catch (e) {
+          console.error("Skipping invalid variant item (update):", v, e);
+          return null;
+        }
+      }).filter(item => item !== null);
 
-        product.variants = updatedVariants;
-      } catch (e) {
-        console.error("Variant update error", e);
-      }
+      product.variants = updatedVariants;
       delete req.body.variants;
     }
 
