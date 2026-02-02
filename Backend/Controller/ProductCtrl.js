@@ -3,6 +3,7 @@ import { uploadToCloudinary } from "../Cloudinary/CloudinaryHelper.js";
 
 /* ================= CREATE PRODUCT ================= */
 /* ================= CREATE PRODUCT ================= */
+/* ================= CREATE PRODUCT ================= */
 export const createProduct = async (req, res) => {
   try {
     const existingProduct = await Product.findOne({
@@ -27,40 +28,53 @@ export const createProduct = async (req, res) => {
       }
     }
 
-    // IDK why but sometimes specifications/variants come as ["[...]"] (double encoded) or just "[...]"
+    // Helper to recursively parse JSON data
     const parseMixedData = (data) => {
-      try {
-        if (!data) return [];
-        if (typeof data === 'string') return JSON.parse(data);
-        if (Array.isArray(data)) {
-          if (data.length === 0) return [];
-          // Check if it is a single string that contains JSON
-          if (data.length === 1 && typeof data[0] === 'string') {
-            try {
-              const parsed = JSON.parse(data[0]);
-              return Array.isArray(parsed) ? parsed : [parsed];
-            } catch (e) {
-              // If parse fails, maybe it's just a regular string array?
-              // Try parsing it as individual json items if they look like objects?
-            }
-          }
-          // Check if it's an array of JSON strings
-          if (typeof data[0] === 'string') {
-            return data.map(item => {
-              try { return JSON.parse(item); } catch (e) { return item; }
-            });
-          }
-          return data;
+      if (!data) return [];
+
+      let parsed = data;
+
+      // 1. If string, parse it
+      if (typeof parsed === 'string') {
+        try {
+          parsed = JSON.parse(parsed);
+        } catch (e) {
+          return []; // Invalid JSON string
         }
-        return [];
-      } catch (e) {
-        console.error("Parsing error", e);
-        return [];
       }
+
+      // 2. If it is now an Array
+      if (Array.isArray(parsed)) {
+        // 2a. Check if it's an array containing a single string that needs parsing (Double wrapping)
+        // e.g. ["[{...}]"]
+        if (parsed.length === 1 && typeof parsed[0] === 'string') {
+          try {
+            const inner = JSON.parse(parsed[0]);
+            // If inner is array, use it. If object, wrap it.
+            if (Array.isArray(inner)) parsed = inner;
+            else parsed = [inner];
+          } catch (e) {
+            // failed to parse inner string, keep as is?
+          }
+        } else {
+          // 2b. If it's an array of strings strings, parse them
+          parsed = parsed.map(item => {
+            if (typeof item === 'string') {
+              try { return JSON.parse(item); } catch (e) { return item; }
+            }
+            return item;
+          });
+        }
+      }
+
+      return Array.isArray(parsed) ? parsed : [parsed];
     };
 
     // Handle specifications
-    let specifications = parseMixedData(req.body.specifications);
+    let specifications = [];
+    if (req.body.specifications) {
+      specifications = parseMixedData(req.body.specifications);
+    }
 
     // Handle Variants
     let variants = [];
@@ -221,35 +235,42 @@ export const updateProduct = async (req, res) => {
       product.images = [...product.images, ...newImages];
     }
 
-    // IDK why but sometimes specifications/variants come as ["[...]"] (double encoded) or just "[...]"
+    // Helper to recursively parse JSON data
     const parseMixedData = (data) => {
-      try {
-        if (!data) return [];
-        if (typeof data === 'string') return JSON.parse(data);
-        if (Array.isArray(data)) {
-          if (data.length === 0) return [];
-          // Check if it is a single string that contains JSON
-          if (data.length === 1 && typeof data[0] === 'string') {
-            try {
-              const parsed = JSON.parse(data[0]);
-              return Array.isArray(parsed) ? parsed : [parsed];
-            } catch (e) {
-              // If parse fails, maybe it's just a regular string array?
-            }
-          }
-          // Check if it's an array of JSON strings
-          if (typeof data[0] === 'string') {
-            return data.map(item => {
-              try { return JSON.parse(item); } catch (e) { return item; }
-            });
-          }
-          return data;
+      if (!data) return [];
+
+      let parsed = data;
+
+      // 1. If string, parse it
+      if (typeof parsed === 'string') {
+        try {
+          parsed = JSON.parse(parsed);
+        } catch (e) {
+          return []; // Invalid JSON string
         }
-        return [];
-      } catch (e) {
-        console.error("Parsing error", e);
-        return [];
       }
+
+      // 2. If it is now an Array
+      if (Array.isArray(parsed)) {
+        // 2a. Check if it's an array containing a single string that needs parsing (Double wrapping)
+        if (parsed.length === 1 && typeof parsed[0] === 'string') {
+          try {
+            const inner = JSON.parse(parsed[0]);
+            if (Array.isArray(inner)) parsed = inner;
+            else parsed = [inner];
+          } catch (e) { }
+        } else {
+          // 2b. If it's an array of strings strings, parse them
+          parsed = parsed.map(item => {
+            if (typeof item === 'string') {
+              try { return JSON.parse(item); } catch (e) { return item; }
+            }
+            return item;
+          });
+        }
+      }
+
+      return Array.isArray(parsed) ? parsed : [parsed];
     };
 
     // Handle specifications
