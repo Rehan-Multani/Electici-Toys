@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { ShoppingCart, Heart, Search, ShoppingBag, X, Instagram, Facebook, Twitter } from 'lucide-react';
+import { ShoppingCart, Heart, Search, ShoppingBag, X, Instagram, Facebook, Youtube, MapPin } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { CartDrawer } from '../components/CartDrawer';
 import { Link } from 'react-router-dom';
@@ -357,10 +357,10 @@ export function Footer() {
                         Revolutionizing playtime with high-quality electric toys. We combine safety, innovation, and pure fun to create unforgettable experiences for kids of all ages.
                     </p>
                     <div className="text-xs text-gray-500 font-medium space-y-1 pt-2 border-t border-white/5">
-                        <p>123 Toy Avenue, Electronic City</p>
-                        <p>Phase 1, Bangalore, Karnataka - 560100</p>
-                        <p>Email: support@electricitoyshub.com</p>
-                        <p>Phone: +91 98765 43210</p>
+                        <p>Shop No. 30R - B/1 first floor new colony Gurgaon Haryana</p>
+                        <p>122001</p>
+                        <p>Customer Care No. 8972085174</p>
+                        <p>Sales  No. 9711411256</p>
                     </div>
                 </div>
 
@@ -411,13 +411,16 @@ export function Footer() {
                         <Button size="sm">JOIN</Button>
                     </div>
                     <div className="flex gap-4 pt-4 justify-center md:justify-start">
-                        <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#1DA1F2] transition-colors">
-                            <Twitter className="h-5 w-5" />
+                        <a href="https://maps.google.com/maps?q=28.46562385559082%2C77.01654815673828&z=17&hl=en" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-500 transition-colors">
+                            <MapPin className="h-5 w-5" />
                         </a>
-                        <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#E4405F] transition-colors">
+                        <a href="https://youtube.com/@electricitoyshub?si=ycSyQv83qhnctEyV" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#FF0000] transition-colors">
+                            <Youtube className="h-5 w-5" />
+                        </a>
+                        <a href="https://www.instagram.com/electricitoyshub?igsh=MTlla2Zmc3ptbGlnag==" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#E4405F] transition-colors">
                             <Instagram className="h-5 w-5" />
                         </a>
-                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#1877F2] transition-colors">
+                        <a href="https://www.facebook.com/share/1HFUDUv9ad/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#1877F2] transition-colors">
                             <Facebook className="h-5 w-5" />
                         </a>
                     </div>
