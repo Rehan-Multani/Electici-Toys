@@ -29,40 +29,55 @@ export const createProduct = async (req, res) => {
 
     // Handle specifications
     let specifications = req.body.specifications;
-    if (specifications && typeof specifications === 'string') {
-      try { specifications = JSON.parse(specifications); } catch (e) { specifications = []; }
+    if (specifications) {
+      try {
+        if (typeof specifications === 'string') {
+          specifications = JSON.parse(specifications);
+        } else if (Array.isArray(specifications) && typeof specifications[0] === 'string') {
+          try { specifications = JSON.parse(specifications[0]); } catch (e) { /* not json */ }
+        }
+      } catch (e) {
+        specifications = Array.isArray(specifications) ? specifications : [];
+      }
     }
 
     // Handle Variants
     let variants = [];
     if (req.body.variants) {
       try {
-        const parsedVariants = typeof req.body.variants === "string"
-          ? JSON.parse(req.body.variants)
-          : Array.isArray(req.body.variants)
-            ? req.body.variants
-            : [];
+        let rawVariants = req.body.variants;
+        if (typeof rawVariants === 'string') {
+          rawVariants = JSON.parse(rawVariants);
+        } else if (Array.isArray(rawVariants) && typeof rawVariants[0] === 'string') {
+          try {
+            const parsed = JSON.parse(rawVariants[0]);
+            if (Array.isArray(parsed)) rawVariants = parsed;
+          } catch (e) { /* keep as is */ }
+        }
+
+        const parsedVariants = Array.isArray(rawVariants) ? rawVariants : [];
         let currentImgIdx = 0;
 
         variants = parsedVariants.map(v => {
-          let variantImages = Array.isArray(v.images) ? v.images : [];
-          const count = Number(v.imageCount) || 0;
+          // Ensure we have an object
+          const variantObj = (typeof v === 'string') ? JSON.parse(v) : v;
+          
+          let variantImages = Array.isArray(variantObj.images) ? variantObj.images : [];
+          const count = Number(variantObj.imageCount) || 0;
+
           if (count > 0) {
             const mapped = allImageUrls.slice(currentImgIdx, currentImgIdx + count);
             variantImages = [...variantImages, ...mapped];
           }
-          currentImgIdx += (v.imageCount || 0);
+          currentImgIdx += count;
+          
           return {
-            color: v.color,
+            color: variantObj.color || "Default",
             images: variantImages
           };
         });
-
-        // If there are leftover images (or main images uploaded separately without variants), 
-        // they stay in 'allImageUrls' but maybe we want to assign them to 'images' field?
-        // Let's keep 'images' field as a fallback or collection of all images.
-
       } catch (e) {
+        console.error("Variant processing error:", e);
         variants = Array.isArray(req.body.variants) ? req.body.variants : [];
       }
     }
@@ -151,14 +166,14 @@ export const getProductById = async (req, res) => {
       const first = productRaw.specifications[0];
       if (typeof first === "string") {
         try {
-          specs = JSON.parse(first);
+          const parsed = JSON.parse(first);
+          if (Array.isArray(parsed)) specs = parsed;
+          else specs = productRaw.specifications;
         } catch {
-          specs = [];
+          specs = productRaw.specifications;
         }
-      } else if (typeof first === "object") {
-        specs = productRaw.specifications;
       } else {
-        specs = [];
+        specs = productRaw.specifications;
       }
     }
 
@@ -198,18 +213,20 @@ export const updateProduct = async (req, res) => {
 
     // Handle specifications
     if (req.body.specifications) {
-      // ... existing logic ...
-      if (typeof req.body.specifications === 'string') {
-        // Try parse to array if it is notably JSON
-        try {
-          const parsed = JSON.parse(req.body.specifications);
-          if (Array.isArray(parsed)) product.specifications = parsed;
-          else product.specifications = [req.body.specifications];
-        } catch (e) {
-          product.specifications = [req.body.specifications];
+      let specs = req.body.specifications;
+      try {
+        if (typeof specs === 'string') {
+          specs = JSON.parse(specs);
+        } else if (Array.isArray(specs) && typeof specs[0] === 'string') {
+          try {
+            const parsed = JSON.parse(specs[0]);
+            if (Array.isArray(parsed)) specs = parsed;
+          } catch (e) { /* not json */ }
         }
-      } else {
-        product.specifications = req.body.specifications;
+        if (Array.isArray(specs)) product.specifications = specs;
+        else product.specifications = [req.body.specifications];
+      } catch (e) {
+        product.specifications = Array.isArray(specs) ? specs : [req.body.specifications];
       }
       delete req.body.specifications;
     }
@@ -217,25 +234,33 @@ export const updateProduct = async (req, res) => {
     // Handle Variants Update
     if (req.body.variants) {
       try {
-        const parsedVariants = typeof req.body.variants === "string"
-          ? JSON.parse(req.body.variants)
-          : Array.isArray(req.body.variants)
-            ? req.body.variants
-            : [];
+        let rawVariants = req.body.variants;
+        if (typeof rawVariants === 'string') {
+          rawVariants = JSON.parse(rawVariants);
+        } else if (Array.isArray(rawVariants) && typeof rawVariants[0] === 'string') {
+          try {
+            const parsed = JSON.parse(rawVariants[0]);
+            if (Array.isArray(parsed)) rawVariants = parsed;
+          } catch (e) { /* keep as is */ }
+        }
+
+        const parsedVariants = Array.isArray(rawVariants) ? rawVariants : [];
         let currentNewImgIdx = 0;
 
         const updatedVariants = parsedVariants.map(v => {
-          // If variant has 'imageCount' > 0, it means it expects new images from the upload batch
-          let variantImages = v.images || []; // start with existing
+          const variantObj = (typeof v === 'string') ? JSON.parse(v) : v;
+          
+          let variantImages = Array.isArray(variantObj.images) ? variantObj.images : [];
+          const count = Number(variantObj.imageCount) || 0;
 
-          if (v.imageCount && v.imageCount > 0) {
-            const newBatch = newImages.slice(currentNewImgIdx, currentNewImgIdx + v.imageCount);
+          if (count > 0) {
+            const newBatch = newImages.slice(currentNewImgIdx, currentNewImgIdx + count);
             variantImages = [...variantImages, ...newBatch];
-            currentNewImgIdx += v.imageCount;
+            currentNewImgIdx += count;
           }
 
           return {
-            color: v.color,
+            color: variantObj.color || "Default",
             images: variantImages
           };
         });
