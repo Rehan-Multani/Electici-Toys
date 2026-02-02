@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { ShoppingCart, Heart, Search, ShoppingBag, X } from 'lucide-react';
+import { ShoppingCart, Heart, Search, ShoppingBag, X, Instagram, Facebook, Twitter } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { CartDrawer } from '../components/CartDrawer';
 import { Link } from 'react-router-dom';
@@ -356,6 +356,12 @@ export function Footer() {
                     <p className="text-sm text-gray-400 leading-relaxed">
                         Revolutionizing playtime with high-quality electric toys. We combine safety, innovation, and pure fun to create unforgettable experiences for kids of all ages.
                     </p>
+                    <div className="text-xs text-gray-500 font-medium space-y-1 pt-2 border-t border-white/5">
+                        <p>123 Toy Avenue, Electronic City</p>
+                        <p>Phase 1, Bangalore, Karnataka - 560100</p>
+                        <p>Email: support@electricitoyshub.com</p>
+                        <p>Phone: +91 98765 43210</p>
+                    </div>
                 </div>
 
                 <div className="space-y-4">
@@ -403,6 +409,17 @@ export function Footer() {
                             className="bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-xs flex-1 outline-none focus:ring-2 focus:ring-primary/20 text-white placeholder:text-gray-500"
                         />
                         <Button size="sm">JOIN</Button>
+                    </div>
+                    <div className="flex gap-4 pt-4 justify-center md:justify-start">
+                        <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#1DA1F2] transition-colors">
+                            <Twitter className="h-5 w-5" />
+                        </a>
+                        <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#E4405F] transition-colors">
+                            <Instagram className="h-5 w-5" />
+                        </a>
+                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#1877F2] transition-colors">
+                            <Facebook className="h-5 w-5" />
+                        </a>
                     </div>
                 </div>
             </div>
