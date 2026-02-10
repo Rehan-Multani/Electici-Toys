@@ -218,7 +218,7 @@ export const adminApproveCancel = async (req, res) => {
         if (order.shippingAddress?.email) {
             sendEmail(
                 order.shippingAddress.email,
-                "Order Cancelled - Electrycity Toys",
+                "Order Cancelled - ELECTRICI TOYS HUB",
                 `<h1>Order Cancelled</h1><p>Your order <b>${order.orderId}</b> has been cancelled as requested.</p>`
             );
         }
@@ -320,7 +320,7 @@ export const adminApproveReturn = async (req, res) => {
         if (order.shippingAddress?.email) {
             sendEmail(
                 order.shippingAddress.email,
-                "Return Approved - Electrycity Toys",
+                "Return Approved - ELECTRICI TOYS HUB",
                 `<h1>Return Approved</h1><p>Your return for order <b>${order.orderId}</b> has been approved. Refund will be processed soon.</p>`
             );
         }
@@ -408,7 +408,7 @@ export const adminCompleteRefund = async (req, res) => {
         if (order.shippingAddress?.email) {
             sendEmail(
                 order.shippingAddress.email,
-                "Refund Processed - Electrycity Toys",
+                "Refund Processed - ELECTRICI TOYS HUB",
                 `<h1>Refund Completed</h1><p>Your refund of ₹${order.refundAmount} for order <b>${order.orderId}</b> has been processed.</p>`
             );
         }

@@ -147,7 +147,7 @@ export const placeOrder = async (req, res) => {
     if (req.user.email) {
       sendEmail(
         req.user.email,
-        "Order Confirmation - Electrycity Toys",
+        "Order Confirmation - ELECTRICI TOYS HUB",
         `<h1>Order Placed!</h1><p>Your order <b>${order.orderId}</b> has been placed successfully.</p><p>Total: ₹${grandTotal}</p>`
       );
     }
@@ -232,7 +232,7 @@ export const verifyPayment = async (req, res) => {
     if (order.shippingAddress && order.shippingAddress.email) {
       sendEmail(
         order.shippingAddress.email,
-        "Payment Received - Electrycity Toys",
+        "Payment Received - ELECTRICI TOYS HUB",
         `<h1>Payment Received!</h1><p>We received your payment for order <b>${order.orderId}</b>.</p>`
       );
     }
@@ -341,7 +341,7 @@ export const updateOrderStatus = async (req, res) => {
     if (order.shippingAddress && order.shippingAddress.email) {
       sendEmail(
         order.shippingAddress.email,
-        `Order ${normalizedStatus} - Electrycity Toys`,
+        `Order ${normalizedStatus} - ELECTRICI TOYS HUB`,
         `<h1>Order Update</h1><p>Your order <b>${order.orderId}</b> is now <b>${normalizedStatus}</b>.</p>`
       );
     }

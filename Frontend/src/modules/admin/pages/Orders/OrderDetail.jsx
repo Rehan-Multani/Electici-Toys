@@ -307,15 +307,7 @@ export default function OrderDetail() {
                             <MapPin className="h-5 w-5 text-primary" /> Delivery Info
                         </h3>
                         <div className="space-y-4">
-                            <div className="flex gap-4">
-                                <div className="h-10 w-10 bg-background rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <Calendar className="h-5 w-5 text-muted-foreground" />
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Expected</p>
-                                    <p className="font-bold uppercase tracking-tight italic">Jan 15, 2026</p>
-                                </div>
-                            </div>
+
                             <div className="space-y-4 pt-4">
                                 <div>
                                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2">Customer</p>
@@ -389,7 +381,7 @@ export default function OrderDetail() {
                 <div ref={invoiceRef} style={{ width: '190mm', padding: '20px', backgroundColor: '#FFFFFF', color: '#111827', fontFamily: 'sans-serif', boxSizing: 'border-box' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', paddingBottom: '32px', marginBottom: '32px', borderBottom: '2px solid #D97706' }}>
                         <div>
-                            <h1 style={{ margin: 0, fontSize: '36px', fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.05em', textTransform: 'uppercase', color: '#D97706' }}>ELECTRYCITY</h1>
+                            <h1 style={{ margin: 0, fontSize: '36px', fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.05em', textTransform: 'uppercase', color: '#D97706' }}>ELECTRICI TOYS HUB</h1>
                             <p style={{ margin: '4px 0 0 0', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280' }}>Premium Electric Toys Store</p>
                         </div>
                         <div style={{ textAlign: 'right' }}>
@@ -426,22 +418,38 @@ export default function OrderDetail() {
                     <table style={{ width: '100%', marginBottom: '40px', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid #E5E7EB' }}>
-                                <th style={{ textAlign: 'left', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280' }}>Item Description</th>
-                                <th style={{ textAlign: 'center', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280' }}>Price</th>
-                                <th style={{ textAlign: 'center', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280' }}>Qty</th>
-                                <th style={{ textAlign: 'right', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280' }}>Total</th>
+                                <th style={{ textAlign: 'left', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280', width: '45%' }}>Item Description</th>
+                                <th style={{ textAlign: 'center', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280', width: '20%' }}>Price</th>
+                                <th style={{ textAlign: 'center', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280', width: '15%' }}>Qty</th>
+                                <th style={{ textAlign: 'right', padding: '16px 0', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280', width: '20%' }}>Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             {order.items.map((item, i) => (
                                 <tr key={i} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                    <td style={{ padding: '16px 0' }}>
-                                        <p style={{ margin: 0, fontWeight: '700', textTransform: 'uppercase', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#111827' }}>{item.name}</p>
-                                        {item.color && <p style={{ margin: '4px 0 0 0', fontSize: '10px', fontWeight: '700', color: '#6B7280' }}>COLOR: {item.color}</p>}
+                                    <td style={{ padding: '16px 0', verticalAlign: 'top' }}>
+                                        <p style={{ margin: 0, fontWeight: '700', textTransform: 'uppercase', fontStyle: 'italic', letterSpacing: '-0.025em', color: '#111827', wordBreak: 'break-word', maxWidth: '250px', lineHeight: '1.2' }}>{item.name}</p>
+                                        {item.color && (
+                                            <p style={{
+                                                margin: '8px 0 0 0',
+                                                fontSize: '9px',
+                                                fontWeight: '900',
+                                                color: '#D97706',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.05em',
+                                                backgroundColor: '#FFFBEB',
+                                                padding: '2px 8px',
+                                                borderRadius: '4px',
+                                                display: 'inline-block',
+                                                border: '1px solid #FEF3C7'
+                                            }}>
+                                                COLOR: {item.color}
+                                            </p>
+                                        )}
                                     </td>
-                                    <td style={{ padding: '16px 0', textAlign: 'center', fontWeight: '700', color: '#111827' }}>₹{item.price.toLocaleString()}</td>
-                                    <td style={{ padding: '16px 0', textAlign: 'center', fontWeight: '700', color: '#111827' }}>{item.quantity}</td>
-                                    <td style={{ padding: '16px 0', textAlign: 'right', fontWeight: '900', fontStyle: 'italic', color: '#111827' }}>₹{(item.price * item.quantity).toLocaleString()}</td>
+                                    <td style={{ padding: '16px 0', textAlign: 'center', fontWeight: '700', color: '#111827', verticalAlign: 'top' }}>₹{item.price.toLocaleString()}</td>
+                                    <td style={{ padding: '16px 0', textAlign: 'center', fontWeight: '700', color: '#111827', verticalAlign: 'top' }}>{item.quantity}</td>
+                                    <td style={{ padding: '16px 0', textAlign: 'right', fontWeight: '900', fontStyle: 'italic', color: '#111827', verticalAlign: 'top' }}>₹{(item.price * item.quantity).toLocaleString()}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -479,7 +487,7 @@ export default function OrderDetail() {
                     </div>
 
                     <div style={{ marginTop: '80px', paddingTop: '40px', textAlign: 'center', borderTop: '1px dashed #E5E7EB' }}>
-                        <p style={{ margin: 0, fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280' }}>Thank you for shopping with Electrycity!</p>
+                        <p style={{ margin: 0, fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280' }}>Thank you for shopping with ELECTRICI TOYS HUB!</p>
                         <p style={{ margin: '8px 0 0 0', fontSize: '8px', fontWeight: '700', color: '#6B7280' }}>This is a computer generated invoice and does not require a signature.</p>
                     </div>
                 </div>
